@@ -4,7 +4,10 @@ let recipeRepository;
 let currentUser;
 
 const recipeCarousel = document.querySelector('.recipe-carousel');
-const searchBox = document.querySelector('.search-box');
+
+const searchBox = document.querySelector('.all-search');
+const favoritesSearchBox = document.querySelector('.favs-search');
+
 const allRecipesButton = document.querySelector('.all-recipes');
 const allRecipesPage = document.querySelector('.all-recipes-page');
 const searchPage = document.querySelector('.search-page')
@@ -132,7 +135,10 @@ const searchAllRecipes = (event) => {
   if (event.key === "Enter" && searchBox.value) {
     event.preventDefault();
     loadSearchPage(recipeRepository.masterSearch(searchBox.value));
-  };
+  } else if (event.key === "Enter" && favoritesSearchBox.value) {
+    event.preventDefault();
+    loadSearchPage(currentUser.favoritesMasterSearch(favoritesSearchBox.value));
+  }
 };
 
 const suggestRecipes = () => {
@@ -158,4 +164,4 @@ document.addEventListener('keydown', searchAllRecipes);
 allRecipesButton.addEventListener('click', () => loadSearchPage(recipeRepository.recipes));
 pageTitle.addEventListener('click', () => loadPage(homePage, searchPage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
-myRecipesButton.addEventListener("click", () => loadSearchPage(currentUser.favoriteRecipes))
+myRecipesButton.addEventListener("click", () => loadSearchPage(currentUser.favoriteRecipes));
