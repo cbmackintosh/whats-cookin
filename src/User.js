@@ -10,7 +10,7 @@ class User {
   }
   
   addRecipeToFavs(recipe) {
-    if (!this.favoriteRecipes.map(recipe => recipe.id).includes(recipe.id)) {
+    if (!this.checkForRecipe(recipe, this.favoriteRecipes)) {
       this.favoriteRecipes.push(recipe)
       localStorage.setItem(`${this.id}-favorites`, JSON.stringify(this.favoriteRecipes))
     }
@@ -22,10 +22,14 @@ class User {
   }
 
   addRecipeToCook(recipe) {
-    if (!this.recipesToCook.map(recipe => recipe.id).includes(recipe.id)) {
+    if (!this.checkForRecipe(recipe, this.recipesToCook)) {
       this.recipesToCook.push(recipe)
       localStorage.setItem(`${this.id}-recipes-to-cook`, JSON.stringify(this.recipesToCook))
     }
+  }
+
+  checkForRecipe(recipe, recipeArray) {
+    return recipeArray.map(recipe => recipe.id).includes(recipe.id);
   }
 
 }
