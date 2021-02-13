@@ -125,7 +125,7 @@ const pickRandomRecipes = (amount) => {
 };
 
 const populateRecipeCarousel = () => {
-  const carousel = pickRandomRecipes(5)
+  const carousel = pickRandomRecipes(5);
   // carousel.forEach(recipe => {
   //   recipeCarousel.innerHTML += `
   //     <article class="recipe-card recipe ${createKebab(recipe.name)}" >
