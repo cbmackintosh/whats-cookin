@@ -39,5 +39,4 @@ const glide = {
   animationDuration: 1000,
   peek: 100
 }
-
-new Glide('.glide', glide).mount()
+window.addEventListener("load", () => new Glide('.glide', glide).mount())

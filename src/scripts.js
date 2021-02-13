@@ -125,17 +125,19 @@ const pickRandomRecipes = (amount) => {
 };
 
 const populateRecipeCarousel = () => {
-  const carousel = pickRandomRecipes(5);
-  // carousel.forEach(recipe => {
-  //   recipeCarousel.innerHTML += `
-  //     <article class="recipe-card recipe ${createKebab(recipe.name)}" >
-  //       <img class="recipe-card-img" src="${recipe.image}">
-  //       <p class="recipe-card-name">${recipe.name}</p>
-  //       <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
-  //       <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
-  //     </article>
-  //   `
-  // });
+  const carousel = pickRandomRecipes(15);
+  carousel.forEach(recipe => {
+    recipeCarousel.innerHTML += `
+    <li class="glide__slide">
+      <article class="recipe-card recipe recipe-card-carousel ${createKebab(recipe.name)}" >
+        <img class="recipe-card-img" src="${recipe.image}">
+        <p class="recipe-card-name">${recipe.name}</p>
+        <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
+        <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
+      </article>
+    </li>
+    `
+  });
 };
 
 const searchAllRecipes = (event) => {
