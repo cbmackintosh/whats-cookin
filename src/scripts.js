@@ -108,7 +108,7 @@ const loadRecipeCard = (event) => {
           ${printIngredients(selectedRecipe)}
         </table>
       </div>
-      <button class="add-to-grocery-button">Add to Grocery List</button>
+      <button class="add-to-grocery-button">Lets Cook</button>
     `
     document.querySelector('.instruction-card-img').src = selectedRecipe.image;
     document.location.href = "#recipeDetailsContainer";
@@ -215,6 +215,12 @@ const loadMobileSearch = (event) => {
   searchAllRecipes(event)
 }
 
+const loadCookCard = (event) => {
+  console.log(event.target.className)
+  if(event.target.className.includes("add-to-grocery-button")) {
+    document.querySelector(".cook-recipe-card").classList.remove("hidden")
+  }
+}
 window.addEventListener('load', compileRecipeRepository);
 window.addEventListener('load', loadRandomUser);
 
@@ -223,7 +229,6 @@ recipeCarousel.addEventListener('click', () => loadRecipeCard(event));
 searchPage.addEventListener('click', () => loadRecipeCard(event));
 pageTitle.addEventListener('click', () => loadPage(homePage, searchPage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
-
 document.addEventListener('keydown', searchAllRecipes)
 
 allRecipesButton.addEventListener('click', () => {
@@ -243,4 +248,4 @@ myRecipesButton.addEventListener("click", () => {
 window.addEventListener('click', () => openDropDownMenu(event))
 window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => loadMobileSearch(event))
-// searchButton.addEventListener("click", () => searchAllRecipes(event));
+instructionCardDirections.addEventListener("click", () => loadCookCard(event))
