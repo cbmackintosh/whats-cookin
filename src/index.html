@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Brygada+1918:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="../node_modules/@glidejs/glide/dist/css/glide.core.min.css">
+    <link rel="stylesheet" href="../node_modules/@glidejs/glide/dist/css/glide.theme.min.css">
   </head>
   <body class="grid">
     <header>
@@ -30,7 +32,20 @@
     <main class ="home-page">
       <section class="main-section">
         <h1 class="home-page-header">Delicious.</h1>
-        <div class="container recipe-carousel">     
+        <div class="container recipe-carousel">   
+          <div class="glide">
+            <div class="glide__track" data-glide-el="track">
+              <ul class="glide__slides">
+                <li class="glide__slide">0</li>
+                <li class="glide__slide">1</li>
+                <li class="glide__slide">2</li>
+              </ul>
+            </div>
+            <div class="glide__arrows" data-glide-el="controls">
+              <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+              <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+            </div>
+          </div>
         </div>
       </section>
       <div class="hidden container instruction">
@@ -51,5 +66,9 @@
     <script type="text/javascript" src="./Recipe.js"></script>
     <script type="text/javascript" src="./Ingredient.js"></script>
     <script type="text/javascript" src="./User.js"></script>
+    <script src="../node_modules/@glidejs/glide/dist/glide.min.js"></script>
+    <script>
+      new Glide('.glide').mount()
+    </script>
   </body>
 </html>

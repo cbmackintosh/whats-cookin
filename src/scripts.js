@@ -126,16 +126,16 @@ const pickRandomRecipes = (amount) => {
 
 const populateRecipeCarousel = () => {
   const carousel = pickRandomRecipes(5)
-  carousel.forEach(recipe => {
-    recipeCarousel.innerHTML += `
-      <article class="recipe-card recipe ${createKebab(recipe.name)}" >
-        <img class="recipe-card-img" src="${recipe.image}">
-        <p class="recipe-card-name">${recipe.name}</p>
-        <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
-        <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
-      </article>
-    `
-  });
+  // carousel.forEach(recipe => {
+  //   recipeCarousel.innerHTML += `
+  //     <article class="recipe-card recipe ${createKebab(recipe.name)}" >
+  //       <img class="recipe-card-img" src="${recipe.image}">
+  //       <p class="recipe-card-name">${recipe.name}</p>
+  //       <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
+  //       <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
+  //     </article>
+  //   `
+  // });
 };
 
 const searchAllRecipes = (event) => {
