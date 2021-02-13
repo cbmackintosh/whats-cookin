@@ -362,6 +362,14 @@ a:hover {
   width: 100%;
   height: auto;
 }
+.glide {
+  height: 100%;
+  bottom: 20px;
+}
+
+.recipe-card-carousel{
+  width: 100%;
+}
 
 .recipe-card-name {
   padding: 2px 10px;

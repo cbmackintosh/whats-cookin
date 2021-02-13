@@ -3,7 +3,7 @@
 let recipeRepository;
 let currentUser;
 
-const recipeCarousel = document.querySelector('.recipe-carousel');
+const recipeCarousel = document.querySelector('.glide__slides');
 const searchBox = document.querySelector('.search-box');
 const allRecipesButton = document.querySelector('.all-recipes');
 const allRecipesPage = document.querySelector('.all-recipes-page');
