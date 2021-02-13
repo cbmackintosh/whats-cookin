@@ -23,7 +23,22 @@ const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-'
 
 const compileRecipeRepository = () => {
   recipeRepository = new RecipeRepository(recipeData, ingredientsData)
-  currentUser = new User(usersData[0], ingredientsData);
+}
+
+function loadRandomUser() {
+  let randomUser = usersData[0] // userData[Math.floor(Math.random() * userData.length)]
+  currentUser = new User(randomUser, 
+    ingredientsData, 
+    fetchLocalStorageData(`${randomUser.id}-favorites`), 
+    fetchLocalStorageData(`${randomUser.id}-recipes-to-cook`));
+}
+
+function fetchLocalStorageData(library) {
+  if (localStorage.getItem(library)) {
+    return JSON.parse(localStorage.getItem(library)).map(storedID => recipeRepository.recipes.find(recipe => recipe.id === storedID.id));
+  } else {
+    return [];
+  }
 }
 
 const loadPage = ((pageTo, pageFrom) => {
@@ -64,7 +79,8 @@ const addToMyFavorites = (event) =>  {
   } else {
     currentUser.removeRecipeFromFavs(returnSelectedRecipe(event));
     event.target.classList.remove('saved');
-  }  
+  }
+  localStorage.setItem(`${currentUser.id}-favorites`, JSON.stringify(currentUser.favoriteRecipes))
 };
 
 const toggleFavoriteButton = (recipe) => {
@@ -144,7 +160,10 @@ const searchAllRecipes = (event) => {
     loadSearchPage(recipeRepository.masterSearch(searchBox.value));
   } else if ((event.key === "Enter" && searchBox.value && searchBox.classList.value.includes("search-favs-mode")) || (event.target.className.includes("search-button") && searchBox.value && searchBox.classList.value.includes("search-favs-mode") )) {
     event.preventDefault()
-    loadSearchPage(currentUser.favoritesMasterSearch(searchBox.value));
+    loadSearchPage(recipeRepository.masterSearch(searchBox.value)
+    .filter(recipe => currentUser.favoriteRecipes
+    .map(favorite => favorite.id)
+    .includes(recipe.id)))
   }
 };
 
@@ -197,6 +216,8 @@ const loadMobileSearch = (event) => {
 }
 
 window.addEventListener('load', compileRecipeRepository);
+window.addEventListener('load', loadRandomUser);
+
 window.addEventListener('load', populateRecipeCarousel);
 recipeCarousel.addEventListener('click', () => loadRecipeCard(event));
 searchPage.addEventListener('click', () => loadRecipeCard(event));
@@ -211,7 +232,6 @@ allRecipesButton.addEventListener('click', () => {
   searchBox.classList.remove('search-favs-mode')
   searchBox.placeholder = "Search all recipes";
 });
-
 
 myRecipesButton.addEventListener("click", () => {
   loadSearchPage(currentUser.favoriteRecipes)
