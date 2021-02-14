@@ -18,12 +18,23 @@ const myRecipesButton = document.querySelector('.my-recipes');
 const searchIcon = document.querySelector('.search-icon');
 const searchButton = document.querySelector('.search-button');
 const navigationBar = document.querySelector(".navigation-bar")
+const pantryButton = document.querySelector(".pantry")
+const pantryPage = document.querySelector(".pantry-page")
+const pages = document.querySelectorAll(".page")
+
 
 const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-');
 
 const compileRecipeRepository = () => {
   recipeRepository = new RecipeRepository(recipeData, ingredientsData)
 }
+
+const capitalizeWords = (phrase) => {
+  let words = phrase.split(' ')
+  let capitalized = words.map( word => word.charAt(0).toUpperCase() + word.slice(1, word.length))
+  return capitalized.join(' ')
+};
+
 
 function loadRandomUser() {
   let randomUser = usersData[0] // userData[Math.floor(Math.random() * userData.length)]
@@ -41,9 +52,9 @@ function fetchLocalStorageData(library) {
   }
 }
 
-const loadPage = ((pageTo, pageFrom) => {
+const loadPage = ((pageTo) => {
+  pages.forEach( page => page.classList.add('hidden'));
   pageTo.classList.remove('hidden');
-  pageFrom.classList.add('hidden');
   if ((pageTo === homePage) || (pageTo === allRecipesPage)) {
     searchBox.classList.add('search-all-mode')
     searchBox.classList.remove('search-favs-mode')
@@ -62,7 +73,7 @@ const printIngredients = (recipe) => {
   return recipe.ingredients.reduce((acc, ingredient) => {
     return acc += `
     <tr>
-      <td class="instruction-card-ingredient">${ingredient.name}</td>
+      <td class="instruction-card-ingredient">${capitalizeWords(ingredient.name)}</td>
       <td class="instruction-card-unit">${ingredient.quantity.amount.toFixed(2)} ${ingredient.quantity.unit}</td>
     </tr>`}, '');
 };
@@ -93,7 +104,7 @@ const loadRecipeCard = (event) => {
   if (event.target.className.includes("recipe-card-button")) {
     addToMyFavorites(event);
   } else if(event.target.closest('.recipe')) {
-    loadPage(homePage, searchPage);
+    loadPage(homePage);
     instruction.classList.remove('hidden');
     const selectedRecipe = returnSelectedRecipe(event)
     instructionCardDirections.innerHTML = `
@@ -119,7 +130,7 @@ const loadRecipeCard = (event) => {
 
 const loadSearchPage = (array) => {
   searchPage.innerHTML = "";
-  loadPage(searchPage, homePage);
+  loadPage(searchPage);
   array.map(recipe => searchPage.innerHTML += `
     <article class="recipe-card recipe ${createKebab(recipe.name)} ">
       <img class="recipe-card-img" src="${recipe.image}">
@@ -202,6 +213,19 @@ const autoCloseMenu = () => {
     searchIcon.classList.remove('disabled')
   }
 }
+const loadPantryPage = () => {
+  loadPage(pantryPage)
+  document.querySelector(".pantry-list").innerHTML = ""
+  currentUser.pantry.forEach(item => {
+    document.querySelector(".pantry-list").innerHTML += `
+    <tr class="pantry-table-row">
+      <td class="pantry-list-item">${capitalizeWords(item.name)}</td>
+      <td class="pantry-list-quantity">${item.quantity}</td>
+    <tr>
+    `
+  })
+}
+
 
 const loadMobileSearch = (event) => {
   console.log(searchBox.value)
@@ -223,13 +247,14 @@ const loadCookCard = (event) => {
     document.querySelector(".cook-recipe-card").classList.remove("hidden")
   }
 }
+
 window.addEventListener('load', compileRecipeRepository);
 window.addEventListener('load', loadRandomUser);
 
 window.addEventListener('load', populateRecipeCarousel);
 recipeCarousel.addEventListener('click', () => loadRecipeCard(event));
 searchPage.addEventListener('click', () => loadRecipeCard(event));
-pageTitle.addEventListener('click', () => loadPage(homePage, searchPage));
+pageTitle.addEventListener('click', () => loadPage(homePage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
 
@@ -251,3 +276,4 @@ window.addEventListener('click', () => openDropDownMenu(event))
 window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => loadMobileSearch(event))
 instructionCardDirections.addEventListener("click", () => loadCookCard(event))
+pantryButton.addEventListener("click", loadPantryPage)
