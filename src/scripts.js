@@ -29,6 +29,13 @@ const compileRecipeRepository = () => {
   recipeRepository = new RecipeRepository(recipeData, ingredientsData)
 }
 
+const capitalizeWords = (phrase) => {
+  let words = phrase.split(' ')
+  let capitalized = words.map( word => word.charAt(0).toUpperCase() + word.slice(1, word.length))
+  return capitalized.join(' ')
+};
+
+
 function loadRandomUser() {
   let randomUser = usersData[0] // userData[Math.floor(Math.random() * userData.length)]
   currentUser = new User(randomUser, 
@@ -66,7 +73,7 @@ const printIngredients = (recipe) => {
   return recipe.ingredients.reduce((acc, ingredient) => {
     return acc += `
     <tr>
-      <td class="instruction-card-ingredient">${ingredient.name}</td>
+      <td class="instruction-card-ingredient">${capitalizeWords(ingredient.name)}</td>
       <td class="instruction-card-unit">${ingredient.quantity.amount.toFixed(2)} ${ingredient.quantity.unit}</td>
     </tr>`}, '');
 };
@@ -210,7 +217,7 @@ const loadPantryPage = () => {
   currentUser.pantry.forEach(item => {
     document.querySelector(".pantry-list").innerHTML += `
     <tr class="pantry-table-row">
-      <td class="pantry-list-item">${item.name}</td>
+      <td class="pantry-list-item">${capitalizeWords(item.name)}</td>
       <td class="pantry-list-quantity">${item.quantity}</td>
     <tr>
     `
