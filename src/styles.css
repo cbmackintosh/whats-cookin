@@ -563,7 +563,7 @@ td {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items:center;
   position: fixed;
   left: 50%;
   top: 50%;

@@ -246,6 +246,25 @@ const ingredientsReport = document.querySelector(".ingredients-report");
 const cookRecipeMessage = document.querySelector(".cook-recipe-message")
 const cookCardButton = document.querySelector(".cook-card-button")
 
+cookCardButton.addEventListener('click', cookCardResponse)
+
+function cookCardResponse() {
+  if (cookCardButton.classList.value.includes('add-to-grocery')) {
+    cookRecipeMessage.innerText = "Missing ingredients added to your grocery list"
+    ingredientsReport.innerHTML = `
+    <ul>
+      <li>item1</li>
+      <li>item1</li>
+      <li>item1</li>
+    </li> 
+    `
+    currentUser.addToGroceryList(currentUser.returnMissingIngredientsFor(recipeRepository.recipes.find(recipe => recipe.id === parseInt(cookCardButton.id))))
+    cookCardButton.innerText = "OK"
+    cookCardButton.classList.remove("add-to-grocery")
+    cookCardButton.classList.add("confirm")
+  }
+}
+
 const loadCookCard = (event) => {
   let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
   console.log(selectedRecipe)
@@ -271,6 +290,7 @@ const cookCardLayout = (recipe) => {
       `
     })
     cookCardButton.classList.add('add-to-grocery')
+    cookCardButton.id = recipe.id
   }
 }
 

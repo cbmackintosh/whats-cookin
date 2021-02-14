@@ -62,6 +62,14 @@ class User {
     }
   }
 
+  returnMissingIngredientsFor(recipe) {
+    return this.compareIngredientsToPantry(recipe).filter(ingredient => ingredient.difference < 0).map(ingredient => ingredient.ingredient)
+  }
+
+  addToGroceryList(array) {
+    this.groceryList = Array.from(new Set(this.groceryList.concat(array)))
+  }
+
 }
 
 if (typeof module !== 'undefined') {
