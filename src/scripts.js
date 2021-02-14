@@ -3,7 +3,7 @@
 let recipeRepository;
 let currentUser;
 
-const recipeCarousel = document.querySelector('.recipe-carousel');
+const recipeCarousel = document.querySelector('.glide__slides');
 const searchBox = document.querySelector('.search-box');
 const allRecipesButton = document.querySelector('.all-recipes');
 const allRecipesPage = document.querySelector('.all-recipes-page');
@@ -141,15 +141,17 @@ const pickRandomRecipes = (amount) => {
 };
 
 const populateRecipeCarousel = () => {
-  const carousel = pickRandomRecipes(5)
+  const carousel = pickRandomRecipes(15);
   carousel.forEach(recipe => {
     recipeCarousel.innerHTML += `
-      <article class="recipe-card recipe ${createKebab(recipe.name)}" >
+    <li class="glide__slide">
+      <article class="recipe-card recipe recipe-card-carousel ${createKebab(recipe.name)}" >
         <img class="recipe-card-img" src="${recipe.image}">
         <p class="recipe-card-name">${recipe.name}</p>
         <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
         <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
       </article>
+    </li>
     `
   });
 };
