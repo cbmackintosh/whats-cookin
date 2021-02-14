@@ -10,6 +10,10 @@ In this project, you will be creating a recipe tracking / meal planning applicat
 
 **Installation Instructions:**
 
+- Clone this repository `git@github.com:cbmackintosh/whats-cookin.git`
+- Install the following dependencies: `npm install` and `npm install @glidejs/glide`
+- From the root directory, open the application on web browser using `open ./src/index.html`
+
 **Technologies used:**
 
 **DTR:**
