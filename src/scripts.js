@@ -119,7 +119,7 @@ const loadRecipeCard = (event) => {
           ${printIngredients(selectedRecipe)}
         </table>
       </div>
-      <button class="lets-cook-button">Lets Cook</button>
+      <button id=${selectedRecipe.id} class="lets-cook-button">Lets Cook</button>
     `
     document.querySelector('.instruction-card-img').src = selectedRecipe.image;
     document.location.href = "#recipeDetailsContainer";
@@ -241,10 +241,50 @@ const loadMobileSearch = (event) => {
   searchAllRecipes(event)
 }
 
+const cookCard = document.querySelector(".cook-recipe-card");
+const ingredientsReport = document.querySelector(".ingredients-report");
+const cookRecipeMessage = document.querySelector(".cook-recipe-message")
+
 const loadCookCard = (event) => {
-  console.log(event.target.className)
+  let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
+  console.log(selectedRecipe)
   if(event.target.className.includes("lets-cook")) {
-    document.querySelector(".cook-recipe-card").classList.remove("hidden")
+    cookCard.classList.remove("hidden")
+    cookCardLayout(selectedRecipe)
+  }
+}
+
+const cookCardLayout = (recipe) => {
+  if (currentUser.hasSufficientIngredientsFor(recipe)) {
+    console.log('you have enough ingredients')
+  } else {
+    cookRecipeMessage.innerText = 'You don\'t have enough ingredients!'
+    currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
+      ingredientsReport.innerHTML += `
+      <tr class="${ingredientsReportClassHandler(ingredient.difference)}">
+        <td>${ingredient.ingredient}</td>
+        <td>${ingredient.required}</td>
+        <td>${ingredient.pantry}</td>
+        <td>${returnCheckMark(ingredient.difference)}</td>
+      </tr>
+      `
+    })
+  }
+}
+
+function ingredientsReportClassHandler(difference) {
+  if (difference >= 0) {
+    return 'enough'
+  } else {
+    return 'insufficient'
+  }
+}
+
+function returnCheckMark(difference) {
+  if (difference >= 0) {
+    return `✓`
+  } else {
+    return difference
   }
 }
 

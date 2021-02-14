@@ -8,6 +8,7 @@ class User {
     this.pantry = userData.pantry.map(pantryItem => new Ingredient(pantryItem.ingredient, pantryItem.amount, ingredientsArray))
     this.favoriteRecipes = storedFavs ? storedFavs : [];
     this.recipesToCook = storedRecipesToCook ? storedRecipesToCook : [];
+    this.groceryList = [];
   }
   
   addRecipeToFavs(recipe) {
@@ -31,6 +32,35 @@ class User {
     this.recipesToCook.splice(this.recipesToCook.indexOf(this.recipesToCook.find(savedRecipe => savedRecipe.id === recipe.id)), 1)
   }
 
+  hasSufficientIngredientsFor(recipe) {
+    if (this.compareIngredientsToPantry(recipe).find(element => element.difference < 0)) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  compareIngredientsToPantry(recipe) {
+    let summary = []
+    let requiredIngredients = recipe.ingredients
+    requiredIngredients.forEach(ingredient => summary.push({
+      ingredient: ingredient.name, 
+      required: ingredient.quantity.amount, 
+      pantry: this.findAmountInPantryOf(ingredient), 
+      difference: this.findAmountInPantryOf(ingredient) - ingredient.quantity.amount,
+      unit: ingredient.quantity.unit,
+    }))
+    return summary
+  }
+
+  findAmountInPantryOf(ingredient) {
+    let matchedIngredient = this.pantry.find(pantryItem => pantryItem.id === ingredient.id)
+    if (!matchedIngredient) {
+      return 0
+    } else {
+      return matchedIngredient.quantity
+    }
+  }
 
 }
 

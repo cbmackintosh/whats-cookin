@@ -560,6 +560,10 @@ td {
 /*Cook recipe card*/ 
 
 .cook-recipe-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -572,12 +576,22 @@ td {
 }
 
 .cook-card-button {
-  position:absolute;
+  /* position:absolute; */
   bottom: 20px;
   left: 40px;
 }
 
+.ingredients-report {
+  overflow: scroll;
+}
 
+.enough {
+  color: green;
+}
+
+.insufficient {
+  color: red;
+}
 
 @media screen and (max-width: 1120px) {
   .instruction,
