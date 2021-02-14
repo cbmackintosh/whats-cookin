@@ -498,7 +498,7 @@ td {
   text-align: center;
   width: 100%;
   font-size: 14px;
- 
+  
 }
 
 .meal-suggestion-container{
@@ -507,7 +507,7 @@ td {
 }
 
 /*Cook recipe card*/ 
- 
+
 .cook-recipe-card {
   position: fixed;
   left: 50%;
@@ -534,47 +534,72 @@ td {
     height: fit-content;
     padding: 40px 0;
   }
-
+  
   .instruction-card-directions {
-  height: fit-content;
-  width: 90%;
-  margin-bottom: 80px;
-  order: 1
+    height: fit-content;
+    width: 90%;
+    margin-bottom: 80px;
+    order: 1
+  }
+  
+  .instruction-card-recipe-name {
+    height: fit-content;
+    margin-bottom: 20px;
+  }
+  
+  .direction-container,
+  .ingredient-container {
+    height: fit-content;
+    overflow: scroll;
+  }
+  
+  .instruction-card-header {
+    font-size: 1em;
+    margin: 20px 0;
+  }
+  
+  .instruction-card-img {
+    height: auto;
+    width: 90%;
+    margin-bottom: 80px;
+  }
+  .meal-suggestion-container{
+    width: 90%;
+    order: 1
+  }
 }
 
-.instruction-card-recipe-name {
-  height: fit-content;
-  margin-bottom: 20px;
+/*Pantry*/
+
+.pantry-page {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, .7)), url(https://images.pexels.com/photos/3186654/pexels-photo-3186654.jpeg?cs=srgb&dl=pexels-nerfee-mirandilla-3186654.jpg&fm=jpg);
+  border-top: 1px solid rgb(138, 138, 138);
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  grid-column: 1/4;
+  height:fit-content;
+  line-height: 2;
+  width: 100%;
+  padding:20px;
+  color:white;
+}
+.pantry-list{
+  width:40%
+}
+.pantry-list-item,
+.pantry-list-quantity {
+  font-size: 18px;
+  border-bottom:1px solid rgb(0, 0, 0);
 }
 
-.direction-container,
-.ingredient-container {
-  height: fit-content;
-  overflow: scroll;
-}
-
-.instruction-card-header {
-  font-size: 1em;
-  margin: 20px 0;
-}
-
-.instruction-card-img {
-  height: auto;
-  width: 90%;
-  margin-bottom: 80px;
-}
-.meal-suggestion-container{
-  width: 90%;
-  order: 1
-}
-}
 
 .hidden {
   display: none;
 }
 
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .saved {

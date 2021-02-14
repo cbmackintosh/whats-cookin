@@ -18,6 +18,10 @@ const myRecipesButton = document.querySelector('.my-recipes');
 const searchIcon = document.querySelector('.search-icon');
 const searchButton = document.querySelector('.search-button');
 const navigationBar = document.querySelector(".navigation-bar")
+const pantryButton = document.querySelector(".pantry")
+const pantryPage = document.querySelector(".pantry-page")
+const pages = document.querySelectorAll(".page")
+
 
 const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-');
 
@@ -200,6 +204,19 @@ const autoCloseMenu = () => {
     searchIcon.classList.remove('disabled')
   }
 }
+const loadPantryPage = () => {
+  loadPage(pantryPage, homePage)
+  document.querySelector(".pantry-list").innerHTML
+  currentUser.pantry.forEach(item => {
+    document.querySelector(".pantry-list").innerHTML += `
+    <tr class="pantry-table-row">
+      <td class="pantry-list-item">${item.name}</td>
+      <td class="pantry-list-quantity">${item.quantity}</td>
+    <tr>
+    `
+  })
+}
+
 
 const loadMobileSearch = (event) => {
   console.log(searchBox.value)
@@ -221,6 +238,7 @@ const loadCookCard = (event) => {
     document.querySelector(".cook-recipe-card").classList.remove("hidden")
   }
 }
+
 window.addEventListener('load', compileRecipeRepository);
 window.addEventListener('load', loadRandomUser);
 
@@ -249,3 +267,4 @@ window.addEventListener('click', () => openDropDownMenu(event))
 window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => loadMobileSearch(event))
 instructionCardDirections.addEventListener("click", () => loadCookCard(event))
+pantryButton.addEventListener("click", loadPantryPage)
