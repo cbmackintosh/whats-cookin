@@ -494,7 +494,8 @@ td {
   border-radius: 10px;
 }
 
-.add-to-grocery-button{
+.add-to-grocery-button,
+.lets-cook-button {
   margin: 20px 0;
   padding: 15px;
   background-color: rgb(255, 250, 103);
@@ -505,7 +506,8 @@ td {
 }
 
 
-.add-to-grocery-button:hover {
+.add-to-grocery-button:hover,
+.lets-cook-button:hover {
   background-color: rgb(227 222 96);
   transition: background-color 300ms ease-in-out;
 }

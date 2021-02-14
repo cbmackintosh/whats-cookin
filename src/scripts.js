@@ -119,7 +119,7 @@ const loadRecipeCard = (event) => {
           ${printIngredients(selectedRecipe)}
         </table>
       </div>
-      <button class="add-to-grocery-button">Lets Cook</button>
+      <button class="lets-cook-button">Lets Cook</button>
     `
     document.querySelector('.instruction-card-img').src = selectedRecipe.image;
     document.location.href = "#recipeDetailsContainer";
@@ -243,7 +243,7 @@ const loadMobileSearch = (event) => {
 
 const loadCookCard = (event) => {
   console.log(event.target.className)
-  if(event.target.className.includes("add-to-grocery-button")) {
+  if(event.target.className.includes("lets-cook")) {
     document.querySelector(".cook-recipe-card").classList.remove("hidden")
   }
 }
