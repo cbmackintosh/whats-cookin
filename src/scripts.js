@@ -45,9 +45,9 @@ function fetchLocalStorageData(library) {
   }
 }
 
-const loadPage = ((pageTo, pageFrom) => {
+const loadPage = ((pageTo) => {
+  pages.forEach( page => page.classList.add('hidden'));
   pageTo.classList.remove('hidden');
-  pageFrom.classList.add('hidden');
   if ((pageTo === homePage) || (pageTo === allRecipesPage)) {
     searchBox.classList.add('search-all-mode')
     searchBox.classList.remove('search-favs-mode')
@@ -97,7 +97,7 @@ const loadRecipeCard = (event) => {
   if (event.target.className.includes("recipe-card-button")) {
     addToMyFavorites(event);
   } else if(event.target.closest('.recipe')) {
-    loadPage(homePage, searchPage);
+    loadPage(homePage);
     instruction.classList.remove('hidden');
     const selectedRecipe = returnSelectedRecipe(event)
     instructionCardDirections.innerHTML = `
@@ -123,7 +123,7 @@ const loadRecipeCard = (event) => {
 
 const loadSearchPage = (array) => {
   searchPage.innerHTML = "";
-  loadPage(searchPage, homePage);
+  loadPage(searchPage);
   array.map(recipe => searchPage.innerHTML += `
     <article class="recipe-card recipe ${createKebab(recipe.name)} ">
       <img class="recipe-card-img" src="${recipe.image}">
@@ -205,8 +205,8 @@ const autoCloseMenu = () => {
   }
 }
 const loadPantryPage = () => {
-  loadPage(pantryPage, homePage)
-  document.querySelector(".pantry-list").innerHTML
+  loadPage(pantryPage)
+  document.querySelector(".pantry-list").innerHTML = ""
   currentUser.pantry.forEach(item => {
     document.querySelector(".pantry-list").innerHTML += `
     <tr class="pantry-table-row">
@@ -245,7 +245,7 @@ window.addEventListener('load', loadRandomUser);
 window.addEventListener('load', populateRecipeCarousel);
 recipeCarousel.addEventListener('click', () => loadRecipeCard(event));
 searchPage.addEventListener('click', () => loadRecipeCard(event));
-pageTitle.addEventListener('click', () => loadPage(homePage, searchPage));
+pageTitle.addEventListener('click', () => loadPage(homePage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
 
