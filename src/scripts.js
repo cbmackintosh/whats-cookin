@@ -244,6 +244,7 @@ const loadMobileSearch = (event) => {
 const cookCard = document.querySelector(".cook-recipe-card");
 const ingredientsReport = document.querySelector(".ingredients-report");
 const cookRecipeMessage = document.querySelector(".cook-recipe-message")
+const cookCardButton = document.querySelector(".cook-card-button")
 
 const loadCookCard = (event) => {
   let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
@@ -263,12 +264,13 @@ const cookCardLayout = (recipe) => {
       ingredientsReport.innerHTML += `
       <tr class="${ingredientsReportClassHandler(ingredient.difference)}">
         <td>${ingredient.ingredient}</td>
-        <td>${ingredient.required}</td>
-        <td>${ingredient.pantry}</td>
-        <td>${returnCheckMark(ingredient.difference)}</td>
+        <td>${ingredient.required.toFixed(2)} ${ingredient.unit}</td>
+        <td>${ingredient.pantry.toFixed(2)} ${ingredient.unit}</td>
+        <td>${returnCheckMark(ingredient)}</td>
       </tr>
       `
     })
+    cookCardButton.classList.add('add-to-grocery')
   }
 }
 
@@ -280,11 +282,11 @@ function ingredientsReportClassHandler(difference) {
   }
 }
 
-function returnCheckMark(difference) {
-  if (difference >= 0) {
+function returnCheckMark(ingredient) {
+  if (ingredient.difference >= 0) {
     return `✓`
   } else {
-    return difference
+    return `${ingredient.difference.toFixed(2)} ${ingredient.unit}`
   }
 }
 

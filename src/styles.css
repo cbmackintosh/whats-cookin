@@ -494,7 +494,7 @@ td {
   border-radius: 10px;
 }
 
-.add-to-grocery-button,
+.cook-card-button,
 .lets-cook-button {
   margin: 20px 0;
   padding: 15px;
@@ -506,7 +506,7 @@ td {
 }
 
 
-.add-to-grocery-button:hover,
+.cook-card-button:hover,
 .lets-cook-button:hover {
   background-color: rgb(227 222 96);
   transition: background-color 300ms ease-in-out;
@@ -581,9 +581,7 @@ td {
   left: 40px;
 }
 
-.ingredients-report {
-  overflow: scroll;
-}
+/* INGREDIENTS REPORT */
 
 .enough {
   color: green;
