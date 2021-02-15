@@ -285,7 +285,7 @@ const loadCookCard = (event) => {
 
 //DETERMINE INITIAL CARD LAYOUT
 const cookCardLayoutHandler = (recipe) => {
-  if (currentUser.recipesToCook.map(savedRecipe => savedRecipe).includes(recipe.id)) { // If the recipe is already in the users RecipesToCook array
+  if (currentUser.recipesToCook.map(savedRecipe => savedRecipe.id).includes(recipe.id)) { // If the recipe is already in the users RecipesToCook array
     recipeAlreadySaved(recipe)
   } else if (currentUser.hasSufficientIngredientsFor(recipe) && !currentUser.recipesToCook.map(savedRecipe => savedRecipe).includes(recipe.id)) { //if the user has sufficient ingredients and the recipe is not the users RecipesToCook array
     userHasSufficientIngredients(recipe)
