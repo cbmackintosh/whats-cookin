@@ -24,7 +24,7 @@ class User {
   addRecipeToCook(recipe) {
     if (!this.recipesToCook.map(recipe => recipe.id).includes(recipe.id)) {
       this.recipesToCook.push(recipe)
-      // localStorage.setItem(`${this.id}-recipes-to-cook`, JSON.stringify(this.recipesToCook))
+      recipe.ingredients.map(ingredient => this.pantry.find(pantryItem => pantryItem.id === ingredient.id).quantity -= ingredient.quantity.amount)
     }
   }
 

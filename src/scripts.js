@@ -363,8 +363,8 @@ const cookCardButtonResponseHandler = () => {
 }
 
 const updateLocalStorage = () => {
-  localStorage.setItem(`${currentUser.id}-favorites`, JSON.stringify(currentUser.recipesToCook))
-  localStorage.setItem(`${currentUser.id}-recipes-to-cook`, JSON.stringify(currentUser.favoriteRecipes))
+  localStorage.setItem(`${currentUser.id}-recipes-to-cook`, JSON.stringify(currentUser.recipesToCook))
+  localStorage.setItem(`${currentUser.id}-favorites`, JSON.stringify(currentUser.favoriteRecipes))
   localStorage.setItem(`${currentUser.id}-grocery-list`, JSON.stringify(currentUser.groceryList))
 }
 
