@@ -494,7 +494,9 @@ td {
   border-radius: 10px;
 }
 
-.add-to-grocery-button{
+.cook-card-button,
+.cook-card-cancel,
+.lets-cook-button {
   margin: 20px 0;
   padding: 15px;
   background-color: rgb(255, 250, 103);
@@ -505,7 +507,8 @@ td {
 }
 
 
-.add-to-grocery-button:hover {
+.cook-card-button:hover,
+.lets-cook-button:hover {
   background-color: rgb(227 222 96);
   transition: background-color 300ms ease-in-out;
 }
@@ -558,6 +561,10 @@ td {
 /*Cook recipe card*/ 
 
 .cook-recipe-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items:center;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -569,13 +576,31 @@ td {
   box-shadow: 0px 1px 20px 6px rgb(78 78 78 / 50%)
 }
 
+.cook-card-options {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
 .cook-card-button {
-  position:absolute;
+  /* position:absolute; */
   bottom: 20px;
   left: 40px;
 }
 
+/* INGREDIENTS REPORT */
 
+.enough {
+  color: green;
+}
+
+.insufficient {
+  color: red;
+}
+
+.ingredient-confirmation-list {
+  list-style-type: none;
+}
 
 @media screen and (max-width: 1120px) {
   .instruction,

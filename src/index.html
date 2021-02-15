@@ -63,8 +63,22 @@
       </div>
     </main>
     <div class="cook-recipe-card container hidden">
-      <h2 class="cook-recipe-message">You dont have enough ingredients</h2>
-      <button class="add-to-grocery-button cook-card-button" type="button">Add to Grocery List</button>
+      <h2 class="cook-recipe-message"></h2>
+      <table class="ingredients-report">
+        <tr>
+          <th>Ingredient</th>
+          <th>Required</th>
+          <th>Pantry</th>
+          <th>Enough?</th>
+        </tr>
+        <ul class="ingredient-confirmation-list hidden">
+        </ul>
+      </table>
+      <p class="cook-card-instructions"></p>
+      <div class="cook-card-options">
+        <button class="cook-card-button" type="button">Add to Grocery List</button>
+        <button class="cook-card-cancel" type="button">Cancel</button>
+      </div>
     </div>
     <script type="text/javascript" src="../data/users.js"></script>
     <script type="text/javascript" src="../data/recipes.js"></script>
