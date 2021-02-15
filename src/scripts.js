@@ -331,7 +331,7 @@ const addedGroceriesConfirmation = (recipe) => {
   ingredientConfirmationList.classList.remove("hidden")
   currentUser.returnMissingIngredientsFor(recipe).forEach(ingredient => {
     ingredientConfirmationList.innerHTML += `
-      <li class="insufficient">${ingredient}</li>`
+      <li class="insufficient">${ingredient.name}</li>`
   })
   cookCardButton.classList.add("hidden")
   cookCardCancel.innerText = "OK"

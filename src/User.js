@@ -63,7 +63,9 @@ class User {
   }
 
   returnMissingIngredientsFor(recipe) {
-    return this.compareIngredientsToPantry(recipe).filter(ingredient => ingredient.difference < 0).map(ingredient => ingredient.ingredient)
+    return this.compareIngredientsToPantry(recipe).filter(ingredient => ingredient.difference < 0).map(ingredient => { 
+      return { name: ingredient.ingredient, amountNeeded: Math.abs(ingredient.difference)}
+    })
   }
 
   addToGroceryList(array) {
