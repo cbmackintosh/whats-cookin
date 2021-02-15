@@ -598,6 +598,10 @@ td {
   color: red;
 }
 
+.ingredient-confirmation-list {
+  list-style-type: none;
+}
+
 @media screen and (max-width: 1120px) {
   .instruction,
   .instrcution-card{

@@ -92,7 +92,7 @@ const addToMyFavorites = (event) =>  {
     currentUser.removeRecipeFromFavs(returnSelectedRecipe(event));
     event.target.classList.remove('saved');
   }
-  localStorage.setItem(`${currentUser.id}-favorites`, JSON.stringify(currentUser.favoriteRecipes))
+  updateLocalStorage()
 };
 
 const toggleFavoriteButton = (recipe) => {
@@ -263,6 +263,7 @@ const cookCardHideAndReset = () => {
 const resetIngredientsReport = () => {
   cookCardCancel.innerText = "Cancel"
   ingredientConfirmationList.innerHTML = ""
+  ingredientConfirmationList.classList.add("hidden")
   ingredientsReport.innerHTML = `
     <tr>
       <th>Ingredient</th>
@@ -333,20 +334,39 @@ const addedGroceriesConfirmation = (recipe) => {
   cookCardCancel.innerText = "OK"
 }
 
+const ingredientsRemovalConfirmation = (recipe) => {
+  cookRecipeMessage.innerText = "The following ingredient amounts were subtracted from your pantry"
+  cookCardInstructions.innerText = `${recipe.name} was added to your cook list.`
+  ingredientsReport.classList.add("hidden");
+  ingredientConfirmationList.classList.remove("hidden")
+  currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
+    ingredientConfirmationList.innerHTML += `
+      <li class="enough">${ingredient.ingredient} ${ingredient.required.toFixed(2)} ${ingredient.unit}</li>`
+  })
+  cookCardButton.classList.add("hidden")
+  cookCardCancel.innerText = "OK"
+}
+
 //COOK CARD BUTTON RESPONSES
 
 const cookCardButtonResponseHandler = () => {
+  let selectedRecipe = findRecipeWithID(parseInt(cookCardButton.id))
   if (cookCardButton.classList.value === "cook-card-button add-to-grocery") {
-    let missingIngredients = currentUser.returnMissingIngredientsFor(findRecipeWithID(parseInt(cookCardButton.id)))
+    let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe)
     currentUser.addToGroceryList(missingIngredients)
-    addedGroceriesConfirmation(findRecipeWithID(parseInt(cookCardButton.id)))
+    addedGroceriesConfirmation(selectedRecipe)
   } else if (cookCardButton.classList.value === "cook-card-button add-to-cook-list") {
-    ingredientsRemovalConfirmation(findRecipeWithID(cookCardButton.id))
+    currentUser.addRecipeToCook(selectedRecipe)
+    ingredientsRemovalConfirmation(selectedRecipe)
   }
+  updateLocalStorage()
 }
 
-
-
+const updateLocalStorage = () => {
+  localStorage.setItem(`${currentUser.id}-favorites`, JSON.stringify(currentUser.recipesToCook))
+  localStorage.setItem(`${currentUser.id}-recipes-to-cook`, JSON.stringify(currentUser.favoriteRecipes))
+  localStorage.setItem(`${currentUser.id}-grocery-list`, JSON.stringify(currentUser.groceryList))
+}
 
 //HELPER FUNCTIONS:
 
