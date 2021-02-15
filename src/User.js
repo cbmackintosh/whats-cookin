@@ -2,13 +2,13 @@
 
 
 class User {
-  constructor(userData, ingredientsArray, storedFavs, storedRecipesToCook) {
+  constructor(userData, ingredientsArray, storedFavs, storedRecipesToCook, storedGroceryList) {
     this.name = userData.name
     this.id = userData.id
     this.pantry = userData.pantry.map(pantryItem => new Ingredient(pantryItem.ingredient, pantryItem.amount, ingredientsArray))
     this.favoriteRecipes = storedFavs ? storedFavs : [];
     this.recipesToCook = storedRecipesToCook ? storedRecipesToCook : [];
-    this.groceryList = [];
+    this.groceryList = storedGroceryList ? storedGroceryList : [];
   }
   
   addRecipeToFavs(recipe) {
@@ -33,10 +33,10 @@ class User {
   }
 
   hasSufficientIngredientsFor(recipe) {
-    if (this.compareIngredientsToPantry(recipe).find(element => element.difference < 0)) {
-      return false;
-    } else {
+    if (!this.returnMissingIngredientsFor(recipe).length) {
       return true;
+    } else {
+      return false;
     }
   }
 

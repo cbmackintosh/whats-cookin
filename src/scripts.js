@@ -41,7 +41,8 @@ function loadRandomUser() {
   currentUser = new User(randomUser, 
     ingredientsData, 
     fetchLocalStorageData(`${randomUser.id}-favorites`), 
-    fetchLocalStorageData(`${randomUser.id}-recipes-to-cook`));
+    fetchLocalStorageData(`${randomUser.id}-recipes-to-cook`),
+    JSON.parse(localStorage.getItem(`${randomUser.id}-grocery-list`)));
 }
 
 function fetchLocalStorageData(library) {
@@ -250,18 +251,24 @@ cookCardButton.addEventListener('click', cookCardResponse)
 
 function cookCardResponse() {
   if (cookCardButton.classList.value.includes('add-to-grocery')) {
+    let missingIngredients = currentUser.returnMissingIngredientsFor(recipeRepository.recipes.find(recipe => recipe.id === parseInt(cookCardButton.id)))
+    ingredientsReport.innerHTML = ""
     cookRecipeMessage.innerText = "Missing ingredients added to your grocery list"
-    ingredientsReport.innerHTML = `
-    <ul>
-      <li>item1</li>
-      <li>item1</li>
-      <li>item1</li>
-    </li> 
-    `
-    currentUser.addToGroceryList(currentUser.returnMissingIngredientsFor(recipeRepository.recipes.find(recipe => recipe.id === parseInt(cookCardButton.id))))
+    missingIngredients.forEach(ingredient => {
+      ingredientsReport.innerHTML += `
+      <tr>
+        <td>${ingredient}</td>
+      </tr>
+      `
+    })
+    currentUser.addToGroceryList(missingIngredients)
+    localStorage.setItem(`${currentUser.id}-grocery-list`, JSON.stringify(currentUser.groceryList))
     cookCardButton.innerText = "OK"
     cookCardButton.classList.remove("add-to-grocery")
     cookCardButton.classList.add("confirm")
+  } else if (cookCardButton.classList.value.includes('confirm')) {
+    cookCard.classList.add('hidden')
+    ingredientsReport.innerHTML = ""
   }
 }
 
