@@ -37,7 +37,7 @@ const capitalizeWords = (phrase) => {
 
 
 function loadRandomUser() {
-  let randomUser = usersData[0] // userData[Math.floor(Math.random() * userData.length)]
+  let randomUser = usersData[1] // userData[Math.floor(Math.random() * userData.length)]
   currentUser = new User(randomUser, 
     ingredientsData, 
     fetchLocalStorageData(`${randomUser.id}-favorites`), 
@@ -242,63 +242,128 @@ const loadMobileSearch = (event) => {
   searchAllRecipes(event)
 }
 
+// --------------------------------------------------------------------------------------------------
+
 const cookCard = document.querySelector(".cook-recipe-card");
 const ingredientsReport = document.querySelector(".ingredients-report");
 const cookRecipeMessage = document.querySelector(".cook-recipe-message")
 const cookCardButton = document.querySelector(".cook-card-button")
+const cookCardCancel = document.querySelector(".cook-card-cancel")
+const cookCardInstructions = document.querySelector(".cook-card-instructions")
+const ingredientConfirmationList = document.querySelector(".ingredient-confirmation-list")
 
-cookCardButton.addEventListener('click', cookCardResponse)
 
-function cookCardResponse() {
-  if (cookCardButton.classList.value.includes('add-to-grocery')) {
-    let missingIngredients = currentUser.returnMissingIngredientsFor(recipeRepository.recipes.find(recipe => recipe.id === parseInt(cookCardButton.id)))
-    ingredientsReport.innerHTML = ""
-    cookRecipeMessage.innerText = "Missing ingredients added to your grocery list"
-    missingIngredients.forEach(ingredient => {
-      ingredientsReport.innerHTML += `
-      <tr>
-        <td>${ingredient}</td>
-      </tr>
-      `
-    })
-    currentUser.addToGroceryList(missingIngredients)
-    localStorage.setItem(`${currentUser.id}-grocery-list`, JSON.stringify(currentUser.groceryList))
-    cookCardButton.innerText = "OK"
-    cookCardButton.classList.remove("add-to-grocery")
-    cookCardButton.classList.add("confirm")
-  } else if (cookCardButton.classList.value.includes('confirm')) {
-    cookCard.classList.add('hidden')
-    ingredientsReport.innerHTML = ""
-  }
+
+//CANCEL OUT OF THE CARD
+const cookCardHideAndReset = () => {
+  cookCard.classList.add("hidden")
+  resetIngredientsReport()
 }
 
+const resetIngredientsReport = () => {
+  cookCardCancel.innerText = "Cancel"
+  ingredientConfirmationList.innerHTML = ""
+  ingredientsReport.innerHTML = `
+    <tr>
+      <th>Ingredient</th>
+      <th>Required</th>
+      <th>Pantry</th>
+      <th>Enough?</th>
+    </tr>`
+}
+
+// LOAD THE CARD
 const loadCookCard = (event) => {
   let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
   console.log(selectedRecipe)
   if(event.target.className.includes("lets-cook")) {
     cookCard.classList.remove("hidden")
-    cookCardLayout(selectedRecipe)
+    cookCardLayoutHandler(selectedRecipe) // DETERMINE CARD LAYOUT
   }
 }
 
-const cookCardLayout = (recipe) => {
-  if (currentUser.hasSufficientIngredientsFor(recipe)) {
-    console.log('you have enough ingredients')
-  } else {
-    cookRecipeMessage.innerText = 'You don\'t have enough ingredients!'
-    currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
-      ingredientsReport.innerHTML += `
-      <tr class="${ingredientsReportClassHandler(ingredient.difference)}">
-        <td>${ingredient.ingredient}</td>
-        <td>${ingredient.required.toFixed(2)} ${ingredient.unit}</td>
-        <td>${ingredient.pantry.toFixed(2)} ${ingredient.unit}</td>
-        <td>${returnCheckMark(ingredient)}</td>
-      </tr>
-      `
-    })
-    cookCardButton.classList.add('add-to-grocery')
-    cookCardButton.id = recipe.id
+//DETERMINE INITIAL CARD LAYOUT
+const cookCardLayoutHandler = (recipe) => {
+  if (currentUser.recipesToCook.map(savedRecipe => savedRecipe).includes(recipe.id)) { // If the recipe is already in the users RecipesToCook array
+    recipeAlreadySaved(recipe)
+  } else if (currentUser.hasSufficientIngredientsFor(recipe) && !currentUser.recipesToCook.map(savedRecipe => savedRecipe).includes(recipe.id)) { //if the user has sufficient ingredients and the recipe is not the users RecipesToCook array
+    userHasSufficientIngredients(recipe)
+  } else if (!currentUser.hasSufficientIngredientsFor(recipe)) { // if user does not have enough ingredients for the recipe
+    userHasInsufficientIngredients(recipe)
   }
+}
+
+//COOK CARD LAYOUT 1: USER HAS ALREADY ADDED THIS RECIPE TO RECIPESTOCOOK
+const recipeAlreadySaved = (recipe) => {
+  cookRecipeMessage.innerText = "This recipe is already on your cook list!"
+  cookCardCancel.classList.remove('hidden')
+  cookCardButton.classList.add('hidden')
+}
+
+const userHasSufficientIngredients = (recipe) => {
+  cookRecipeMessage.innerText = "You have enough ingredients for this recipe!"
+  cookCardInstructions.innerText = "Adding this recipe to your cook list will remove the necessary ingredient amounts from your pantry"
+  ingredientsReport.classList.remove("hidden")
+  compileIngredientsReport(recipe)
+  cookCardButton.id = recipe.id
+  cookCardButton.classList = "cook-card-button add-to-cook-list"
+  cookCardButton.innerText = "Add to my recipes to cook!"
+}
+
+const userHasInsufficientIngredients = (recipe) => {
+  cookRecipeMessage.innerText = "You don't have enough ingredients for this recipe"
+  cookCardInstructions.innerText = "Click below to add the missing ingredients to your grocery list"
+  ingredientsReport.classList.remove("hidden")
+  compileIngredientsReport(recipe)
+  cookCardButton.id = recipe.id
+  cookCardButton.classList = "cook-card-button add-to-grocery"
+  cookCardButton.innerText = "Add to grocery"
+}
+
+const addedGroceriesConfirmation = (recipe) => {
+  cookRecipeMessage.innerText = "The following ingredients were added to your grocery list"
+  cookCardInstructions.innerText = "";
+  ingredientsReport.classList.add("hidden");
+  ingredientConfirmationList.classList.remove("hidden")
+  currentUser.returnMissingIngredientsFor(recipe).forEach(ingredient => {
+    ingredientConfirmationList.innerHTML += `
+      <li class="insufficient">${ingredient}</li>`
+  })
+  cookCardButton.classList.add("hidden")
+  cookCardCancel.innerText = "OK"
+}
+
+//COOK CARD BUTTON RESPONSES
+
+const cookCardButtonResponseHandler = () => {
+  if (cookCardButton.classList.value === "cook-card-button add-to-grocery") {
+    let missingIngredients = currentUser.returnMissingIngredientsFor(findRecipeWithID(parseInt(cookCardButton.id)))
+    currentUser.addToGroceryList(missingIngredients)
+    addedGroceriesConfirmation(findRecipeWithID(parseInt(cookCardButton.id)))
+  } else if (cookCardButton.classList.value === "cook-card-button add-to-cook-list") {
+    ingredientsRemovalConfirmation(findRecipeWithID(cookCardButton.id))
+  }
+}
+
+
+
+
+//HELPER FUNCTIONS:
+
+const findRecipeWithID = (id) => {
+  return recipeRepository.recipes.find(recipe => recipe.id === id);
+}
+
+const compileIngredientsReport = (recipe) => {
+  currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
+    ingredientsReport.innerHTML += `
+    <tr class="${ingredientsReportClassHandler(ingredient.difference)}">
+      <td>${ingredient.ingredient}</td>
+      <td>${ingredient.required.toFixed(2)} ${ingredient.unit}</td>
+      <td>${ingredient.pantry.toFixed(2)} ${ingredient.unit}</td>
+      <td>${returnCheckMark(ingredient)}</td>
+    </tr>`
+  })
 }
 
 function ingredientsReportClassHandler(difference) {
@@ -316,6 +381,8 @@ function returnCheckMark(ingredient) {
     return `${ingredient.difference.toFixed(2)} ${ingredient.unit}`
   }
 }
+
+// -------------------------------------------------
 
 window.addEventListener('load', compileRecipeRepository);
 window.addEventListener('load', loadRandomUser);
@@ -346,3 +413,7 @@ window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => loadMobileSearch(event))
 instructionCardDirections.addEventListener("click", () => loadCookCard(event))
 pantryButton.addEventListener("click", loadPantryPage)
+
+
+cookCardButton.addEventListener('click', cookCardButtonResponseHandler)
+cookCardCancel.addEventListener('click', cookCardHideAndReset)

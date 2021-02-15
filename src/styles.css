@@ -495,6 +495,7 @@ td {
 }
 
 .cook-card-button,
+.cook-card-cancel,
 .lets-cook-button {
   margin: 20px 0;
   padding: 15px;
@@ -573,6 +574,12 @@ td {
   background-color: white;
   border-radius: 10px;
   box-shadow: 0px 1px 20px 6px rgb(78 78 78 / 50%)
+}
+
+.cook-card-options {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .cook-card-button {
