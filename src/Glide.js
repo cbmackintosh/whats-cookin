@@ -37,6 +37,7 @@ const glide = {
   hooverpause: true,
   keyboard: true,
   animationDuration: 1000,
-  peek: 100
+  peek: 100,
+  direction: "ltr"
 }
 window.addEventListener("load", () => new Glide('.glide', glide).mount())

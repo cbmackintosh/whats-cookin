@@ -350,6 +350,7 @@ a:hover {
   min-width: 200px;
   background-color: rgb(255, 255, 255);
   transition: box-shadow 0.3s ease-in-out;
+  /* filter: blur(1px) grayscale(100%) brightness(50%) */
 }
 
 .recipe-card:hover{
@@ -557,10 +558,20 @@ td {
   width: 45%;
   justify-content: space-between;
 }
+@media screen and (max-width: 600px) {
+  .cook-recipe-card {
+    width: 80%
+  }
 
+  .instruction-card {
+    padding: 30px 5px;
+    width: 95%;
+  }
+}
 /*Cook recipe card*/ 
 
 .cook-recipe-card {
+  padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -569,7 +580,7 @@ td {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  height: 50%;
+  height: fit-content;
   width: 50%;
   background-color: white;
   border-radius: 10px;
@@ -577,25 +588,32 @@ td {
 }
 
 .cook-card-options {
+
   display: flex;
   width: 100%;
   justify-content: space-around;
 }
 
 .cook-card-button {
-  /* position:absolute; */
-  bottom: 20px;
-  left: 40px;
+  /* margin-top: 30px; */
 }
 
 /* INGREDIENTS REPORT */
 
+.cook-card-instructions{
+  margin-bottom: 20px;
+}
+
+.ingredients-report {
+  margin: 30px 0;
+}
+
 .enough {
-  color: green;
+  color: rgb(11, 112, 11);
 }
 
 .insufficient {
-  color: red;
+  color: rgb(209, 12, 12);
 }
 
 .ingredient-confirmation-list {
@@ -645,7 +663,8 @@ td {
 
 /*Pantry*/
 
-.pantry-page {
+.pantry-page,
+.grocery-list-page {
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, .7)), url(https://images.pexels.com/photos/3186654/pexels-photo-3186654.jpeg?cs=srgb&dl=pexels-nerfee-mirandilla-3186654.jpg&fm=jpg);
   border-top: 1px solid rgb(138, 138, 138);
   background-size:cover;
@@ -653,11 +672,13 @@ td {
   background-position: center;
   grid-column: 1/4;
   height:fit-content;
+  min-height: 95vh;
   line-height: 2;
   width: 100%;
-  padding:20px;
+  padding:50px;
   color:white;
 }
+
 .pantry-list{
   width:40%
 }
@@ -666,7 +687,34 @@ td {
   font-size: 18px;
   border-bottom:1px solid rgb(0, 0, 0);
 }
+/* Grocery List*/
 
+.grocery-list-page {
+ background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, .7)), url(https://images.pexels.com/photos/2733918/pexels-photo-2733918.jpeg?cs=srgb&dl=pexels-matheus-cenali-2733918.jpg&fm=jpg);
+ padding: 0;
+}
+.grocery-container {
+  padding:50px;
+  position:absolute;
+  backdrop-filter:blur(3px);
+  height: fit-content;
+  min-height: 95vh;
+  width: 100%;
+}
+
+.add-to-pantry {
+  margin: 20px 0;
+  background-color: white;
+  height: fit-content;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.add-to-pantry:hover {
+  border: 1px solid black;
+  color:black;
+  background-color: rgb(241, 241, 241);
+}
 
 .hidden {
   display: none;
