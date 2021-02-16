@@ -401,7 +401,7 @@ const addedToGroceryListConfirmation = (recipe) => {
     cookCardCancelButton.innerText = "OK";
     currentUser.returnMissingIngredientsFor(recipe).forEach(ingredient => {
       ingredientConfirmationList.innerHTML += `
-        <li class="insufficient">${ingredient}</li>`
+        <li class="insufficient">${ingredient.name}</li>`
     })
   }
   updateLocalStorage()

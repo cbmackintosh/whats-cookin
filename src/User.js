@@ -44,7 +44,7 @@ class User {
     let requiredIngredients = recipe.ingredients
     requiredIngredients.forEach(ingredient => summary.push({
       id: ingredient.id,
-      ingredient: ingredient.name, 
+      name: ingredient.name, 
       required: ingredient.quantity.amount, 
       pantry: this.findAmountInPantryOf(ingredient), 
       difference: this.findAmountInPantryOf(ingredient) - ingredient.quantity.amount,
@@ -66,7 +66,7 @@ class User {
     return this.compareIngredientsToPantry(recipe).filter(ingredient => ingredient.difference < 0).map(ingredient => { 
       return {
         id: ingredient.id,
-        name: ingredient.ingredient,
+        name: ingredient.name,
         amountNeeded: Math.ceil(Math.abs(ingredient.difference))
       }
     })
@@ -74,6 +74,7 @@ class User {
 
   addToGroceryList(array) {
     this.groceryList = Array.from(new Set(this.groceryList.concat(array)))
+    // search the grocerylist array. for each array item if the gorcery.name = array.name grocery.required += array.required
   }
 
   removeRecipeIngredientAmounts(recipe) {
