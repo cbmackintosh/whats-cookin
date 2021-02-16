@@ -245,26 +245,208 @@ const loadMobileSearch = (event) => {
   searchAllRecipes(event)
 }
 
+
 // --------------------------------------------------------------------------------------------------
 
 const cookCard = document.querySelector(".cook-recipe-card");
 const ingredientsReport = document.querySelector(".ingredients-report");
 const cookRecipeMessage = document.querySelector(".cook-recipe-message")
-const cookCardButton = document.querySelector(".cook-card-button")
-const cookCardCancel = document.querySelector(".cook-card-cancel")
 const cookCardInstructions = document.querySelector(".cook-card-instructions")
 const ingredientConfirmationList = document.querySelector(".ingredient-confirmation-list")
+
+const cookCardActionButton = document.querySelector(".cook-card-action")
+const cookListAddRemoveButton = document.querySelector(".cook-list-action")
+const cookCardCancelButton = document.querySelector(".cook-card-cancel")
+
+// LOAD THE CARD
+const loadCookCard = (event) => {
+  let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
+  console.log(selectedRecipe)
+  if(event.target.className.includes("lets-cook")) {
+    cookCard.classList.remove("hidden")
+    cookCardLayoutHandler(selectedRecipe)
+  }
+}
+
+const cookCardLayoutHandler = (recipe) => {
+  cookCardActionButton.id = recipe.id;
+  if (currentUser.recipesToCook.map(savedRecipe => savedRecipe.id).includes(parseInt(recipe.id))) {
+    cookCardSavedRecipeLayout(recipe); // 1 RECIPE IS ALREADY ON THE COOK LIST
+  } else {
+    cookCardUnsavedRecipeLayout(recipe); // 2 RECIPE IS NOT ON THE COOK LIST
+  }
+}
+
+// 1 RECIPE IS ALREADY ON THE COOK LIST -----------------------------------------------------------------
+
+const cookCardSavedRecipeLayout = (recipe) => {
+  if (currentUser.hasSufficientIngredientsFor(recipe)) {
+    readyToCookLayout(recipe); // 1.1 RECIPE IS ON THE COOK LIST AND USER HAS ENOUGH INGREDIENTS
+  } else {
+    notReadyToCookLayout(recipe); // 1.2 RECIPE IS ON THE COOK LIST BUT USER HAS INSUFFICIENT INGREDIENTS
+  }
+}
+
+// 1.1)
+const readyToCookLayout = (recipe) => {
+  cookRecipeMessage.innerText = "You have enough ingredients for this recipe";
+  compileIngredientsReport(recipe);
+  cookCardInstructions.innerText = "Clicking COOK NOW will remove the needed ingredient amounts from your pantry";
+  //ACTION BUTTON:
+  cookCardActionButton.innerText = "COOK NOW";
+  cookCardActionButton.classList = "cook-card-action cook-now";
+  //ADD-REMOVE BUTTON:
+  cookListAddRemoveButton.innerText = "REMOVE";
+  cookListAddRemoveButton.classList = "cook-list-action remove";
+}
+
+// 1.2)
+const notReadyToCookLayout = (recipe) => {
+  cookRecipeMessage.innerText = "You still do not have enough ingredients for this recipe";
+  compileIngredientsReport(recipe);
+  cookCardInstructions.innerText = "Click below to add the missing ingredients to your grocery list"
+  //ACTION BUTTON:
+  cookCardActionButton.innerText = "ADD TO GROCERY"
+  cookCardActionButton.classList = "cook-card-action add-to-grocery"
+
+  //ADD-REMOVE BUTTON:
+  cookListAddRemoveButton.innerText = "REMOVE";
+  cookListAddRemoveButton.classList = "cook-list-action remove";
+} 
+
+// 2 RECIPE IS NOT ON THE COOK LIST ----------------------------------------------------------------------
+
+const cookCardUnsavedRecipeLayout = (recipe) => {
+  if (currentUser.hasSufficientIngredientsFor(recipe)) {
+    sufficientIngredientsLayout(recipe) // 2.1 RECIPE IS NOT ON THE COOK LIST AND THE USER HAS ENOUGH INGREDIENTS
+  } else {
+    insufficientIngredientsLayout(recipe) // 2.2 RECIPE IS NOT ON THE COOK LIST AND USER HAS INSUFFICIENT INGREDIENTS
+  }
+}
+
+// 2.1)
+const sufficientIngredientsLayout = (recipe) => {
+  cookRecipeMessage.innerText = "You have enough ingredients for this recipe";
+  compileIngredientsReport(recipe);
+  cookCardInstructions.innerText = "Clicking cook now will remove the ingredient amounts from your pantry";
+  //ACTION BUTTON:
+  cookCardActionButton.innerText = "COOK NOW";
+  cookCardActionButton.classList = "cook-card-action cook-now";
+  //ADD-REMOVE BUTTON:
+  cookListAddRemoveButton.innerText = "ADD TO COOK LIST";
+  cookListAddRemoveButton.classList = "cook-list-action add";
+}
+
+// 2.2)
+const insufficientIngredientsLayout = (recipe) => {
+  cookRecipeMessage.innerText = "You do not have enough ingredients for this recipe";
+  compileIngredientsReport(recipe);
+  cookCardInstructions.innerText = "Adding this recipe to your cook list will add the missing ingredients to your grocery list";
+  //ACTION BUTTON:
+  cookCardActionButton.classList = "cook-card-action hidden";
+  //ADD-REMOVE BUTTON:
+  cookListAddRemoveButton.innerText = "ADD TO COOK LIST";
+  cookListAddRemoveButton.classList = "cook-list-action add";
+  cookListAddRemoveButton.id = recipe.id;
+}
+
+// ---------COOK CARD BUTTON RESPONSES---------------------------------------
+
+// cookCardActionButton
+const cookCardActionResponse = () => {
+  let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
+  if (cookCardActionButton.classList.value === "cook-card-action cook-now") {
+    currentUser.removeRecipeToCook(selectedRecipe);
+    currentUser.removeRecipeIngredientAmounts(selectedRecipe);
+    ingredientsRemovalConfirmation(selectedRecipe)
+  } else if (cookCardActionButton.classList.value === "cook-card-action add-to-grocery") {
+    let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
+    currentUser.addToGroceryList(missingIngredients)
+    addedToGroceryListConfirmation(selectedRecipe)
+  }
+}
+
+const ingredientsRemovalConfirmation = (recipe) => {
+  cookRecipeMessage.innerText = "Recipe complete! The following ingredient amounts were removed from your pantry";
+  cookCardInstructions.innerText = "This recipe was removed from your cook list";
+  cookCardActionButton.classList = "cook-card-action hidden";
+  cookListAddRemoveButton.classList = "cook-list-action hidden";
+  cookCardCancelButton.innerText = "OK";
+  ingredientsReport.classList.add("hidden");
+  ingredientConfirmationList.classList.remove("hidden");
+  currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
+    ingredientConfirmationList.innerHTML += `
+    <li class"enough">${ingredient.name} ${ingredient.required.toFixed(2)} ${ingredient.unit}</li>`;
+  })
+  updateLocalStorage(); 
+}
+
+const addedToGroceryListConfirmation = (recipe) => {
+  if (!currentUser.returnMissingIngredientsFor(recipe).length) {
+    cookRecipeMessage.innerText = `${recipe.name} was added to your list of recipes to cook`;
+    ingredientsReport.classList.add("hidden");
+    cookCardInstructions.classList.add("hidden")
+    cookListAddRemoveButton.classList.add("hidden")
+    cookCardActionButton.classList = "cook-card-action hidden";
+    cookCardActionButton.classList = "cook-card-action hidden";
+    cookCardCancelButton.innerText = "OK";
+  } else {
+    cookRecipeMessage.innerText = "The following items were added to your grocery list";
+    ingredientsReport.classList.add("hidden");
+    cookCardInstructions.classList.add("hidden")
+    cookListAddRemoveButton.classList.add("hidden")
+    ingredientConfirmationList.classList.remove("hidden");
+    cookCardActionButton.classList = "cook-card-action hidden";
+    cookCardActionButton.classList = "cook-card-action hidden";
+    cookCardCancelButton.innerText = "OK";
+    currentUser.returnMissingIngredientsFor(recipe).forEach(ingredient => {
+      ingredientConfirmationList.innerHTML += `
+        <li class="insufficient">${ingredient}</li>`
+    })
+  }
+  updateLocalStorage()
+}
+
+const recipeToCookRemovalConfirmation = (recipe) => {
+  cookRecipeMessage.innerText = `${recipe.name} was removed from your list of recipes to cook`;
+  cookCardActionButton.classList = "cook-card-action hidden";
+  cookCardActionButton.classList = "cook-card-action hidden";
+  ingredientsReport.classList.add("hidden");
+  cookCardInstructions.classList.add("hidden");
+  cookListAddRemoveButton.classList.add("hidden");
+  cookCardCancelButton.innerText = "OK";
+  updateLocalStorage()
+}
+
+// cookListActionButton
+const cookListAddRemoveHandler = () => {
+  let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
+  if (cookListAddRemoveButton.classList.value === "cook-list-action add") {
+    let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
+    currentUser.addRecipeToCook(selectedRecipe);
+    currentUser.addToGroceryList(missingIngredients);
+    addedToGroceryListConfirmation(selectedRecipe);
+  } else if (cookListAddRemoveButton.classList.value === "cook-list-action remove") {
+    currentUser.removeRecipeToCook(selectedRecipe);
+    recipeToCookRemovalConfirmation(selectedRecipe);
+  }
+}
+ 
+// --------------------------------------------------------------------------
 
 
 
 //CANCEL OUT OF THE CARD
 const cookCardHideAndReset = () => {
   cookCard.classList.add("hidden")
+  cookCardCancelButton.innerText = "CANCEL"
+  ingredientsReport.classList.remove("hidden")
+  cookCardInstructions.classList.remove("hidden")
   resetIngredientsReport()
 }
 
 const resetIngredientsReport = () => {
-  cookCardCancel.innerText = "Cancel"
+  cookCardCancelButton.innerText = "Cancel"
   ingredientConfirmationList.innerHTML = ""
   ingredientConfirmationList.classList.add("hidden")
   ingredientsReport.innerHTML = `
@@ -276,102 +458,14 @@ const resetIngredientsReport = () => {
     </tr>`
 }
 
-// LOAD THE CARD
-const loadCookCard = (event) => {
-  let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
-  console.log(selectedRecipe)
-  if(event.target.className.includes("lets-cook")) {
-    cookCard.classList.remove("hidden")
-    cookCardLayoutHandler(selectedRecipe) // DETERMINE CARD LAYOUT
-  }
-}
 
-//DETERMINE INITIAL CARD LAYOUT
-const cookCardLayoutHandler = (recipe) => {
-  if (currentUser.recipesToCook.map(savedRecipe => savedRecipe.id).includes(recipe.id)) { // If the recipe is already in the users RecipesToCook array
-    recipeAlreadySaved(recipe)
-  } else if (currentUser.hasSufficientIngredientsFor(recipe) && !currentUser.recipesToCook.map(savedRecipe => savedRecipe).includes(recipe.id)) { //if the user has sufficient ingredients and the recipe is not the users RecipesToCook array
-    userHasSufficientIngredients(recipe)
-  } else if (!currentUser.hasSufficientIngredientsFor(recipe)) { // if user does not have enough ingredients for the recipe
-    userHasInsufficientIngredients(recipe)
-  }
-}
-
-//COOK CARD LAYOUT 1: USER HAS ALREADY ADDED THIS RECIPE TO RECIPESTOCOOK
-const recipeAlreadySaved = (recipe) => {
-  cookRecipeMessage.innerText = "This recipe is already on your cook list!"
-  cookCardCancel.classList.remove('hidden')
-  cookCardButton.classList.add('hidden')
-}
-
-const userHasSufficientIngredients = (recipe) => {
-  cookRecipeMessage.innerText = "You have enough ingredients for this recipe!"
-  cookCardInstructions.innerText = "Adding this recipe to your cook list will remove the necessary ingredient amounts from your pantry"
-  ingredientsReport.classList.remove("hidden")
-  compileIngredientsReport(recipe)
-  cookCardButton.id = recipe.id
-  cookCardButton.classList = "cook-card-button add-to-cook-list"
-  cookCardButton.innerText = "Add to my recipes to cook!"
-}
-
-const userHasInsufficientIngredients = (recipe) => {
-  cookRecipeMessage.innerText = "You don't have enough ingredients for this recipe"
-  cookCardInstructions.innerText = "Click below to add the missing ingredients to your grocery list"
-  ingredientsReport.classList.remove("hidden")
-  compileIngredientsReport(recipe)
-  cookCardButton.id = recipe.id
-  cookCardButton.classList = "cook-card-button add-to-grocery"
-  cookCardButton.innerText = "Add to grocery"
-}
-
-const addedGroceriesConfirmation = (recipe) => {
-  cookRecipeMessage.innerText = "The following ingredients were added to your grocery list"
-  cookCardInstructions.innerText = "";
-  ingredientsReport.classList.add("hidden");
-  ingredientConfirmationList.classList.remove("hidden")
-  currentUser.returnMissingIngredientsFor(recipe).forEach(ingredient => {
-    ingredientConfirmationList.innerHTML += `
-      <li class="insufficient">${ingredient}</li>`
-  })
-  cookCardButton.classList.add("hidden")
-  cookCardCancel.innerText = "OK"
-}
-
-const ingredientsRemovalConfirmation = (recipe) => {
-  cookRecipeMessage.innerText = "The following ingredient amounts were subtracted from your pantry"
-  cookCardInstructions.innerText = `${recipe.name} was added to your cook list.`
-  ingredientsReport.classList.add("hidden");
-  ingredientConfirmationList.classList.remove("hidden")
-  currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
-    ingredientConfirmationList.innerHTML += `
-      <li class="enough">${ingredient.ingredient} ${ingredient.required.toFixed(2)} ${ingredient.unit}</li>`
-  })
-  cookCardButton.classList.add("hidden")
-  cookCardCancel.innerText = "OK"
-}
-
-//COOK CARD BUTTON RESPONSES
-
-const cookCardButtonResponseHandler = () => {
-  let selectedRecipe = findRecipeWithID(parseInt(cookCardButton.id))
-  if (cookCardButton.classList.value === "cook-card-button add-to-grocery") {
-    let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe)
-    currentUser.addToGroceryList(missingIngredients)
-    addedGroceriesConfirmation(selectedRecipe)
-  } else if (cookCardButton.classList.value === "cook-card-button add-to-cook-list") {
-    currentUser.addRecipeToCook(selectedRecipe)
-    ingredientsRemovalConfirmation(selectedRecipe)
-  }
-  updateLocalStorage()
-}
+//HELPER FUNCTIONS:
 
 const updateLocalStorage = () => {
   localStorage.setItem(`${currentUser.id}-recipes-to-cook`, JSON.stringify(currentUser.recipesToCook))
   localStorage.setItem(`${currentUser.id}-favorites`, JSON.stringify(currentUser.favoriteRecipes))
   localStorage.setItem(`${currentUser.id}-grocery-list`, JSON.stringify(currentUser.groceryList))
 }
-
-//HELPER FUNCTIONS:
 
 const findRecipeWithID = (id) => {
   return recipeRepository.recipes.find(recipe => recipe.id === id);
@@ -381,7 +475,7 @@ const compileIngredientsReport = (recipe) => {
   currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
     ingredientsReport.innerHTML += `
     <tr class="${ingredientsReportClassHandler(ingredient.difference)}">
-      <td>${ingredient.ingredient}</td>
+      <td>${ingredient.name}</td>
       <td>${ingredient.required.toFixed(2)} ${ingredient.unit}</td>
       <td>${ingredient.pantry.toFixed(2)} ${ingredient.unit}</td>
       <td>${returnCheckMark(ingredient)}</td>
@@ -461,7 +555,8 @@ instructionCardDirections.addEventListener("click", () => loadCookCard(event))
 pantryButton.addEventListener("click", loadPantryPage)
 
 
-cookCardButton.addEventListener('click', cookCardButtonResponseHandler)
-cookCardCancel.addEventListener('click', cookCardHideAndReset)
+cookCardActionButton.addEventListener('click', cookCardActionResponse)
+cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
+cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
 groceryListButton.addEventListener('click', loadGroceryPage)
 addToPantryButton.addEventListener('click', checkValue)
