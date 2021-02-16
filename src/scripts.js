@@ -136,8 +136,8 @@ const loadRecipeCard = (event) => {
 
 
 const loadPageResults = (array, page) => {
-  page.innerHTML = "";
   loadPage(page);
+  page.innerHTML = "";
   array.forEach(recipe => page.innerHTML += `
     <article class="recipe-card recipe ${createKebab(recipe.name)} ">
       <img class="recipe-card-img" src="${recipe.image}">
@@ -441,7 +441,7 @@ const recipeToCookRemovalConfirmation = (recipe) => {
 // cookListActionButton
 const cookListAddRemoveHandler = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
-  if (cookListAddRemoveButton.classList.value === "cook-list-action add") {
+  if (cookListAddRemoveButton.className.includes('cook-list-action')) {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
     currentUser.addRecipeToCook(selectedRecipe);
     currentUser.addToGroceryList(missingIngredients, selectedRecipe);
@@ -587,6 +587,7 @@ instructionCardDirections.addEventListener("click", () => loadCookCard(event))
 
 cookCardActionButton.addEventListener('click', cookCardActionResponse)
 cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
+
 cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
 groceryListButton.addEventListener('click', loadGroceryPage) 
 addToPantryButton.addEventListener('click', checkValue) 

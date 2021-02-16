@@ -14,9 +14,7 @@ class User {
   addRecipeToFavs(recipe) {
     if (!this.favoriteRecipes.map(recipe => recipe.id).includes(recipe.id)) {
       this.favoriteRecipes.push(recipe)
-    } else {
-      return true
-    }
+    } 
   }
 
   removeRecipeFromFavs(recipe) {
@@ -26,6 +24,8 @@ class User {
   addRecipeToCook(recipe) {
     if (!this.recipesToCook.map(recipe => recipe.id).includes(recipe.id)) {
       this.recipesToCook.push(recipe)
+    } else {
+      return
     }
   }
 
@@ -75,7 +75,7 @@ class User {
   }
 
   addToGroceryList(array, recipe) {
-    if (this.addRecipeToFavs(recipe)) {
+    if (this.addRecipeToCook(recipe)) {
       return
     }
     array.forEach(item => {
