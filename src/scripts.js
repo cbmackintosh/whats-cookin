@@ -447,7 +447,7 @@ const cookListAddRemoveHandler = () => {
   if (cookListAddRemoveButton.classList.value === "cook-list-action add") {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
     currentUser.addRecipeToCook(selectedRecipe);
-    currentUser.addToGroceryList(missingIngredients);
+    currentUser.addToGroceryList(missingIngredients, selectedRecipe);
     addedToGroceryListConfirmation(selectedRecipe);
   } else if (cookListAddRemoveButton.classList.value === "cook-list-action remove") {
     currentUser.removeRecipeToCook(selectedRecipe);
@@ -527,17 +527,20 @@ const loadGroceryPage = () => {
   document.querySelector(".grocery-list-items").innerHTML = ""
   currentUser.groceryList.forEach(item => {
     document.querySelector(".grocery-list-items").innerHTML += `
-       <input type="checkbox" class="grocery-item" value="${item.name}">   
+       <input type="checkbox" class="grocery-item" value="${item.id}">   
        <label>${capitalizeWords(item.name)}</label><p class="quantity">${item.amountNeeded}</p><br>
     `
   });
 };
 
 const checkValue = () => {
-  const items = document.querySelectorAll(".pantry-list-item")
+  const items = document.querySelectorAll(".grocery-item")
+  console.log(items)
   items.forEach(item => {
     if(item.checked){
-      currentUser.groceryList.splice(currentUser.groceryList.indexOf(item.value), 1);
+      const selectedGrocery = currentUser.groceryList.find(grocery => grocery.id === parseInt(item.value))
+      console.log(selectedGrocery)
+      currentUser.groceryList.splice(currentUser.groceryList.indexOf(selectedGrocery), 1);
     };
   });
   const updatedGroceryList = currentUser.groceryList;
