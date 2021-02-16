@@ -29,7 +29,7 @@ const recipesToCook = document.querySelector('.recipes-to-cook')
 const recipesToCookPage = document.querySelector('.recipes-to-cook-page')
 
 
-const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-');
+const createKebab = (recipeName) => recipeName.replace(/[^a-zA-Z ]/g, '').split(' ').filter(el => el.length).join('-');
 
 const compileRecipeRepository = () => {
   recipeRepository = new RecipeRepository(recipeData, ingredientsData)
@@ -151,10 +151,8 @@ const loadPageResults = (array, page) => {
 
 const blurCard = () => {
   currentUser.recipesToCook.forEach( recipe => {
-
     if(!currentUser.hasSufficientIngredientsFor(recipe)){
-      const recipeCard = document.querySelector(`.${createKebab(recipe.name)}`)
-      // recipeCard.classList.add('blur');
+      let recipeCard = document.querySelector("." + createKebab(recipe.name))
       recipeCard.insertAdjacentHTML('afterbegin', '<p class="more-ingredients">Not enough ingredients</p>')
     }
 
@@ -217,7 +215,6 @@ const suggestRecipes = () => {
 
 const loadRecipesToCook = (event) => {
   if(event.target.className.includes('recipes-to-cook')) {
-    loadPage(recipesToCookPage);
     loadPageResults(currentUser.recipesToCook, recipesToCookPage);
     blurCard();
   };
@@ -535,12 +532,11 @@ const loadGroceryPage = () => {
 
 const checkValue = () => {
   const items = document.querySelectorAll(".grocery-item")
-  console.log(items)
   items.forEach(item => {
     if(item.checked){
-      const selectedGrocery = currentUser.groceryList.find(grocery => grocery.id === parseInt(item.value))
-      console.log(selectedGrocery)
+      const selectedGrocery = currentUser.groceryList.find(grocery => grocery.id === parseInt(item.value));
       currentUser.groceryList.splice(currentUser.groceryList.indexOf(selectedGrocery), 1);
+      currentUser.addIngredientToPantry(selectedGrocery, ingredientsData);
     };
   });
   const updatedGroceryList = currentUser.groceryList;

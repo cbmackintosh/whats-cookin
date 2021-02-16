@@ -230,7 +230,7 @@ a:hover {
 
   .navigation-buttons {
     border-top: .5px solid black;
-    z-index: 5;
+    z-index: 200;
     grid-row: 2/6;
     grid-column: 1/ span 2;
     /* justify-self: center; */

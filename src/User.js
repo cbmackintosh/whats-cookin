@@ -94,6 +94,16 @@ class User {
     recipe.ingredients.map(ingredient => this.pantry.find(pantryItem => pantryItem.id === ingredient.id).quantity -= ingredient.quantity.amount)
   }
 
+  addIngredientToPantry(ingredient, ingredientsArray) {
+    this.pantry.forEach(item => {
+      if(item.id === ingredient.id){
+        item.quantity += ingredient.amountNeeded;
+      };
+    });
+    if (!this.pantry.some(item => item.id === ingredient.id)) {
+      this.pantry.push(new Ingredient(ingredient.id, ingredient.amountNeeded, ingredientsArray));
+    };
+  };
 }
 
 if (typeof module !== 'undefined') {

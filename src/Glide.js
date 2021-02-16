@@ -26,8 +26,13 @@ const glide = {
       gap: 150,   
     },
     500: {
-      perView: 2,
+      perView: 1.5,
       gap: 80,  
+      peek: 80
+    },
+    395: {
+      perView: 1,
+      gap: 100,
       peek: 80
     }
   },
