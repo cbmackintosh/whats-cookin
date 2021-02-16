@@ -135,18 +135,31 @@ const loadRecipeCard = (event) => {
 };
 
 
-const loadSearchPage = (array) => {
-  searchPage.innerHTML = "";
-  loadPage(searchPage);
-  array.map(recipe => searchPage.innerHTML += `
+const loadPageResults = (array, page) => {
+  page.innerHTML = "";
+  loadPage(page);
+  array.forEach(recipe => page.innerHTML += `
     <article class="recipe-card recipe ${createKebab(recipe.name)} ">
       <img class="recipe-card-img" src="${recipe.image}">
       <p class="recipe-card-name">${recipe.name}</p>
       <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
       <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
     </article>
-  `);
+  `
+  );
 };
+
+const blurCard = () => {
+  currentUser.recipesToCook.forEach( recipe => {
+
+    if(!currentUser.hasSufficientIngredientsFor(recipe)){
+      const recipeCard = document.querySelector(`.${createKebab(recipe.name)}`)
+      recipeCard.classList.add('blur');
+      recipeCard.insertAdjacentHTML('afterbegin', '<p class="more-ingredients">Not enough ingredients</p>')
+    }
+
+  })
+}
 
 const pickRandomRecipes = (amount) => {
   return recipeRepository.recipes.reduce((array, recipe) =>{
@@ -177,13 +190,13 @@ const populateRecipeCarousel = () => {
 const searchAllRecipes = (event) => {
   if ((event.key === "Enter" && searchBox.value && searchBox.classList.value.includes("search-all-mode")) || (event.target.className.includes("search-button") && searchBox.value && searchBox.classList.value.includes("search-all-mode") )) {
     event.preventDefault();
-    loadSearchPage(recipeRepository.masterSearch(searchBox.value));
+    loadPageResults(recipeRepository.masterSearch(searchBox.value), searchPage);
   } else if ((event.key === "Enter" && searchBox.value && searchBox.classList.value.includes("search-favs-mode")) || (event.target.className.includes("search-button") && searchBox.value && searchBox.classList.value.includes("search-favs-mode") )) {
     event.preventDefault()
-    loadSearchPage(recipeRepository.masterSearch(searchBox.value)
+    loadPageResults(recipeRepository.masterSearch(searchBox.value)
     .filter(recipe => currentUser.favoriteRecipes
     .map(favorite => favorite.id)
-    .includes(recipe.id)))
+    .includes(recipe.id)), searchPage)
   }
 };
 
@@ -202,7 +215,12 @@ const suggestRecipes = () => {
   });
 };
 
+const loadRecipesToCook = () => {
+  loadPage(recipesToCookPage)
+  loadPageResults(currentUser.recipesToCook, recipesToCookPage)
+  blurCard()
 
+}
 
 const openDropDownMenu = (event) => {
     if(event.target.className.includes("drop-down")){
@@ -537,14 +555,14 @@ mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
 
 allRecipesButton.addEventListener('click', () => {
-  loadSearchPage(recipeRepository.recipes)
+  loadPageResults(recipeRepository.recipes, searchPage)
   searchBox.classList.add('search-all-mode')
   searchBox.classList.remove('search-favs-mode')
   searchBox.placeholder = "Search all recipes";
 });
 
 myRecipesButton.addEventListener("click", () => {
-  loadSearchPage(currentUser.favoriteRecipes)
+  loadPageResults(currentUser.favoriteRecipes, searchPage)
   searchBox.classList.remove('search-all-mode')
   searchBox.classList.add('search-favs-mode')
   searchBox.placeholder = "Search favorite recipes";
@@ -562,4 +580,4 @@ cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
 cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
 groceryListButton.addEventListener('click', loadGroceryPage)
 addToPantryButton.addEventListener('click', checkValue)
-recipesToCook.addEventListener('click', () => loadPage(recipesToCookPage))
+recipesToCook.addEventListener('click', loadRecipesToCook)
