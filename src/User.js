@@ -24,7 +24,6 @@ class User {
   addRecipeToCook(recipe) {
     if (!this.recipesToCook.map(recipe => recipe.id).includes(recipe.id)) {
       this.recipesToCook.push(recipe)
-      recipe.ingredients.map(ingredient => this.pantry.find(pantryItem => pantryItem.id === ingredient.id).quantity -= ingredient.quantity.amount)
     }
   }
 
@@ -75,6 +74,10 @@ class User {
 
   addToGroceryList(array) {
     this.groceryList = Array.from(new Set(this.groceryList.concat(array)))
+  }
+
+  removeRecipeIngredientAmounts(recipe) {
+    recipe.ingredients.map(ingredient => this.pantry.find(pantryItem => pantryItem.id === ingredient.id).quantity -= ingredient.quantity.amount)
   }
 
 }
