@@ -154,7 +154,7 @@ const blurCard = () => {
 
     if(!currentUser.hasSufficientIngredientsFor(recipe)){
       const recipeCard = document.querySelector(`.${createKebab(recipe.name)}`)
-      recipeCard.classList.add('blur');
+      // recipeCard.classList.add('blur');
       recipeCard.insertAdjacentHTML('afterbegin', '<p class="more-ingredients">Not enough ingredients</p>')
     }
 
@@ -575,20 +575,6 @@ pageTitle.addEventListener('click', () => loadPage(homePage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
 
-// allRecipesButton.addEventListener('click', () => {
-//   loadPageResults(recipeRepository.recipes, searchPage)
-//   searchBox.classList.add('search-all-mode')
-//   searchBox.classList.remove('search-favs-mode')
-//   searchBox.placeholder = "Search all recipes";
-// });
-
-// myRecipesButton.addEventListener("click", () => {
-//   loadPageResults(currentUser.favoriteRecipes, searchPage)
-//   searchBox.classList.remove('search-all-mode')
-//   searchBox.classList.add('search-favs-mode')
-//   searchBox.placeholder = "Search favorite recipes";
-// })
-
 window.addEventListener('click', () => openDropDownMenu(event))
 window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => {
@@ -597,14 +583,11 @@ navigationBar.addEventListener("click", () => {
   loadRecipesToCook(event)
   loadMyRecipes(event)
   loadAllRecipes(event)
-}) //nav
+})
 instructionCardDirections.addEventListener("click", () => loadCookCard(event))
-// pantryButton.addEventListener("click", loadPantryPage) //nav
-
 
 cookCardActionButton.addEventListener('click', cookCardActionResponse)
 cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
 cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
 groceryListButton.addEventListener('click', loadGroceryPage) 
 addToPantryButton.addEventListener('click', checkValue) 
-// recipesToCook.addEventListener('click', loadRecipesToCook) //nav button
