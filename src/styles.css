@@ -495,7 +495,8 @@ td {
   border-radius: 10px;
 }
 
-.cook-card-button,
+.cook-card-action,
+.cook-list-action,
 .cook-card-cancel,
 .lets-cook-button {
   margin: 20px 0;
