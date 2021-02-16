@@ -410,8 +410,8 @@ const loadGroceryPage = () => {
   document.querySelector(".grocery-list-items").innerHTML = ""
   currentUser.groceryList.forEach(item => {
     document.querySelector(".grocery-list-items").innerHTML += `
-       <input type="checkbox" class="pantry-list-item" value="${item}">   
-       <label>${capitalizeWords(item)}</label><br>
+       <input type="checkbox" class="grocery-item" value="${item.name}">   
+       <label>${capitalizeWords(item.name)}</label><p class="quantity">${item.amountNeeded}</p><br>
     `
   });
 };

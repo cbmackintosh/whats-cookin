@@ -44,6 +44,7 @@ class User {
     let summary = []
     let requiredIngredients = recipe.ingredients
     requiredIngredients.forEach(ingredient => summary.push({
+      id: ingredient.id,
       ingredient: ingredient.name, 
       required: ingredient.quantity.amount, 
       pantry: this.findAmountInPantryOf(ingredient), 
@@ -64,7 +65,11 @@ class User {
 
   returnMissingIngredientsFor(recipe) {
     return this.compareIngredientsToPantry(recipe).filter(ingredient => ingredient.difference < 0).map(ingredient => { 
-      return { name: ingredient.ingredient, amountNeeded: Math.abs(ingredient.difference)}
+      return {
+        id: ingredient.id,
+        name: ingredient.ingredient,
+        amountNeeded: Math.ceil(Math.abs(ingredient.difference))
+      }
     })
   }
 
