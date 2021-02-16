@@ -20,7 +20,11 @@ const searchButton = document.querySelector('.search-button');
 const navigationBar = document.querySelector(".navigation-bar")
 const pantryButton = document.querySelector(".pantry")
 const pantryPage = document.querySelector(".pantry-page")
+const groceryListPage = document.querySelector('.grocery-list-page')
 const pages = document.querySelectorAll(".page")
+const groceryListButton = document.querySelector('.grocery-list')
+const groceryListForm = document.querySelector(".grocery-list-items")
+const addToPantryButton = document.querySelector('.add-to-pantry')
 
 
 const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-');
@@ -229,7 +233,6 @@ const loadPantryPage = () => {
 
 
 const loadMobileSearch = (event) => {
-  console.log(searchBox.value)
   const target = event.target.className
   if (target.includes('search-icon')) {
     document.querySelector(".search").classList.toggle('flex')
@@ -402,6 +405,29 @@ function returnCheckMark(ingredient) {
   }
 }
 
+const loadGroceryPage = () => {
+  loadPage(groceryListPage) ;
+  document.querySelector(".grocery-list-items").innerHTML = ""
+  currentUser.groceryList.forEach(item => {
+    document.querySelector(".grocery-list-items").innerHTML += `
+       <input type="checkbox" class="pantry-list-item" value="${item}">   
+       <label>${capitalizeWords(item)}</label><br>
+    `
+  });
+};
+
+const checkValue = () => {
+  const items = document.querySelectorAll(".pantry-list-item")
+  items.forEach(item => {
+    if(item.checked){
+      currentUser.groceryList.splice(currentUser.groceryList.indexOf(item.value), 1);
+    };
+  });
+  const updatedGroceryList = currentUser.groceryList;
+  localStorage.setItem('2-grocery-list', JSON.stringify(updatedGroceryList));
+  loadGroceryPage();
+};
+
 // -------------------------------------------------
 
 window.addEventListener('load', compileRecipeRepository);
@@ -437,3 +463,5 @@ pantryButton.addEventListener("click", loadPantryPage)
 
 cookCardButton.addEventListener('click', cookCardButtonResponseHandler)
 cookCardCancel.addEventListener('click', cookCardHideAndReset)
+groceryListButton.addEventListener('click', loadGroceryPage)
+addToPantryButton.addEventListener('click', checkValue)
