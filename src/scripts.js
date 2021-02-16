@@ -361,7 +361,7 @@ const cookCardActionResponse = () => {
     ingredientsRemovalConfirmation(selectedRecipe)
   } else if (cookCardActionButton.classList.value === "cook-card-action add-to-grocery") {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
-    currentUser.addToGroceryList(missingIngredients)
+    currentUser.addToGroceryList(missingIngredients, selectedRecipe)
     addedToGroceryListConfirmation(selectedRecipe)
   }
 }

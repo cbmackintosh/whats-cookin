@@ -14,6 +14,8 @@ class User {
   addRecipeToFavs(recipe) {
     if (!this.favoriteRecipes.map(recipe => recipe.id).includes(recipe.id)) {
       this.favoriteRecipes.push(recipe)
+    } else {
+      return true
     }
   }
 
@@ -72,9 +74,20 @@ class User {
     })
   }
 
-  addToGroceryList(array) {
-    this.groceryList = Array.from(new Set(this.groceryList.concat(array)))
-    // search the grocerylist array. for each array item if the gorcery.name = array.name grocery.required += array.required
+  addToGroceryList(array, recipe) {
+    if (this.addRecipeToFavs(recipe)) {
+      return
+    }
+    array.forEach(item => {
+      this.groceryList.forEach( grocery => {
+        if(grocery.name === item.name) {
+          grocery.amountNeeded += item.amountNeeded
+        }
+      })
+      if(!this.groceryList.some( grocery => grocery.id === item.id)){
+        this.groceryList.push(item)
+      }
+    })
   }
 
   removeRecipeIngredientAmounts(recipe) {
