@@ -25,6 +25,8 @@ const pages = document.querySelectorAll(".page")
 const groceryListButton = document.querySelector('.grocery-list')
 const groceryListForm = document.querySelector(".grocery-list-items")
 const addToPantryButton = document.querySelector('.add-to-pantry')
+const recipesToCook = document.querySelector('.recipes-to-cook')
+const recipesToCookPage = document.querySelector('.recipes-to-cook-page')
 
 
 const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-');
@@ -133,18 +135,31 @@ const loadRecipeCard = (event) => {
 };
 
 
-const loadSearchPage = (array) => {
-  searchPage.innerHTML = "";
-  loadPage(searchPage);
-  array.map(recipe => searchPage.innerHTML += `
+const loadPageResults = (array, page) => {
+  page.innerHTML = "";
+  loadPage(page);
+  array.forEach(recipe => page.innerHTML += `
     <article class="recipe-card recipe ${createKebab(recipe.name)} ">
       <img class="recipe-card-img" src="${recipe.image}">
       <p class="recipe-card-name">${recipe.name}</p>
       <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
       <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
     </article>
-  `);
+  `
+  );
 };
+
+const blurCard = () => {
+  currentUser.recipesToCook.forEach( recipe => {
+
+    if(!currentUser.hasSufficientIngredientsFor(recipe)){
+      const recipeCard = document.querySelector(`.${createKebab(recipe.name)}`)
+      // recipeCard.classList.add('blur');
+      recipeCard.insertAdjacentHTML('afterbegin', '<p class="more-ingredients">Not enough ingredients</p>')
+    }
+
+  })
+}
 
 const pickRandomRecipes = (amount) => {
   return recipeRepository.recipes.reduce((array, recipe) =>{
@@ -175,13 +190,13 @@ const populateRecipeCarousel = () => {
 const searchAllRecipes = (event) => {
   if ((event.key === "Enter" && searchBox.value && searchBox.classList.value.includes("search-all-mode")) || (event.target.className.includes("search-button") && searchBox.value && searchBox.classList.value.includes("search-all-mode") )) {
     event.preventDefault();
-    loadSearchPage(recipeRepository.masterSearch(searchBox.value));
+    loadPageResults(recipeRepository.masterSearch(searchBox.value), searchPage);
   } else if ((event.key === "Enter" && searchBox.value && searchBox.classList.value.includes("search-favs-mode")) || (event.target.className.includes("search-button") && searchBox.value && searchBox.classList.value.includes("search-favs-mode") )) {
     event.preventDefault()
-    loadSearchPage(recipeRepository.masterSearch(searchBox.value)
+    loadPageResults(recipeRepository.masterSearch(searchBox.value)
     .filter(recipe => currentUser.favoriteRecipes
     .map(favorite => favorite.id)
-    .includes(recipe.id)))
+    .includes(recipe.id)), searchPage)
   }
 };
 
@@ -200,7 +215,13 @@ const suggestRecipes = () => {
   });
 };
 
-
+const loadRecipesToCook = (event) => {
+  if(event.target.className.includes('recipes-to-cook')) {
+    loadPage(recipesToCookPage);
+    loadPageResults(currentUser.recipesToCook, recipesToCookPage);
+    blurCard();
+  };
+};
 
 const openDropDownMenu = (event) => {
     if(event.target.className.includes("drop-down")){
@@ -218,17 +239,19 @@ const autoCloseMenu = () => {
     searchIcon.classList.remove('disabled')
   }
 }
-const loadPantryPage = () => {
-  loadPage(pantryPage)
-  document.querySelector(".pantry-list").innerHTML = ""
-  currentUser.pantry.forEach(item => {
-    document.querySelector(".pantry-list").innerHTML += `
-    <tr class="pantry-table-row">
-      <td class="pantry-list-item">${capitalizeWords(item.name)}</td>
-      <td class="pantry-list-quantity">${item.quantity}</td>
-    <tr>
-    `
-  })
+const loadPantryPage = (event) => {
+  if(event.target.className.includes('pantry')){
+    loadPage(pantryPage);
+    document.querySelector(".pantry-list").innerHTML = ""
+    currentUser.pantry.forEach(item => {
+      document.querySelector(".pantry-list").innerHTML += `
+      <tr class="pantry-table-row">
+        <td class="pantry-list-item">${capitalizeWords(item.name)}</td>
+        <td class="pantry-list-quantity">${item.quantity}</td>
+      <tr>
+      `
+    });
+  }
 }
 
 
@@ -522,6 +545,24 @@ const checkValue = () => {
   loadGroceryPage();
 };
 
+const loadMyRecipes = (event) => {
+  if(event.target.className.includes('my-recipes')) {
+    loadPageResults(currentUser.favoriteRecipes, searchPage)
+    searchBox.classList.remove('search-all-mode')
+    searchBox.classList.add('search-favs-mode')
+    searchBox.placeholder = "Search favorite recipes";
+  }
+}
+
+const loadAllRecipes = (event) => {
+  if (event.target.className.includes('all-recipes')) {
+    loadPageResults(recipeRepository.recipes, searchPage)
+    searchBox.classList.add('search-all-mode')
+    searchBox.classList.remove('search-favs-mode')
+    searchBox.placeholder = "Search all recipes";
+  }
+}
+
 // -------------------------------------------------
 
 window.addEventListener('load', compileRecipeRepository);
@@ -534,29 +575,19 @@ pageTitle.addEventListener('click', () => loadPage(homePage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
 
-allRecipesButton.addEventListener('click', () => {
-  loadSearchPage(recipeRepository.recipes)
-  searchBox.classList.add('search-all-mode')
-  searchBox.classList.remove('search-favs-mode')
-  searchBox.placeholder = "Search all recipes";
-});
-
-myRecipesButton.addEventListener("click", () => {
-  loadSearchPage(currentUser.favoriteRecipes)
-  searchBox.classList.remove('search-all-mode')
-  searchBox.classList.add('search-favs-mode')
-  searchBox.placeholder = "Search favorite recipes";
-})
-
 window.addEventListener('click', () => openDropDownMenu(event))
 window.addEventListener("resize", autoCloseMenu);
-navigationBar.addEventListener("click", () => loadMobileSearch(event))
+navigationBar.addEventListener("click", () => {
+  loadMobileSearch(event)
+  loadPantryPage(event)
+  loadRecipesToCook(event)
+  loadMyRecipes(event)
+  loadAllRecipes(event)
+})
 instructionCardDirections.addEventListener("click", () => loadCookCard(event))
-pantryButton.addEventListener("click", loadPantryPage)
-
 
 cookCardActionButton.addEventListener('click', cookCardActionResponse)
 cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
 cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
-groceryListButton.addEventListener('click', loadGroceryPage)
-addToPantryButton.addEventListener('click', checkValue)
+groceryListButton.addEventListener('click', loadGroceryPage) 
+addToPantryButton.addEventListener('click', checkValue) 
