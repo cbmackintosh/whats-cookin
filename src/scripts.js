@@ -25,6 +25,8 @@ const pages = document.querySelectorAll(".page")
 const groceryListButton = document.querySelector('.grocery-list')
 const groceryListForm = document.querySelector(".grocery-list-items")
 const addToPantryButton = document.querySelector('.add-to-pantry')
+const recipesToCook = document.querySelector('.recipes-to-cook')
+const recipesToCookPage = document.querySelector('.recipes-to-cook-page')
 
 
 const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-');
@@ -560,3 +562,4 @@ cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
 cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
 groceryListButton.addEventListener('click', loadGroceryPage)
 addToPantryButton.addEventListener('click', checkValue)
+recipesToCook.addEventListener('click', () => loadPage(recipesToCookPage))
