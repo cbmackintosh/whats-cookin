@@ -35,6 +35,7 @@ const ingredientConfirmationList = document.querySelector(".ingredient-confirmat
 const cookCardActionButton = document.querySelector(".cook-card-action");
 const cookListAddRemoveButton = document.querySelector(".cook-list-action");
 const cookCardCancelButton = document.querySelector(".cook-card-cancel");
+const homePageHeader = document.querySelector(".home-page-header")
 
 
 const createKebab = (recipeName) => recipeName.replace(/[^a-zA-Z ]/g, '').split(' ').filter(el => el.length).join('-');
@@ -58,6 +59,7 @@ function loadRandomUser() {
     fetchLocalStorageData(`${randomUser.id}-favorites`), 
     fetchLocalStorageData(`${randomUser.id}-recipes-to-cook`),
     JSON.parse(localStorage.getItem(`${randomUser.id}-grocery-list`)));
+  homePageHeader.innerText = `Hi, ${currentUser.name.split(' ')[0]}`
 }
 
 function fetchLocalStorageData(library) {
@@ -383,18 +385,12 @@ const addedToGroceryListConfirmation = (recipe) => {
   if (!currentUser.returnMissingIngredientsFor(recipe).length) {
     cookRecipeMessage.innerText = `${recipe.name} was added to your list of recipes to cook`;
     hideElements([ingredientsReport, cookCardInstructions, cookListAddRemoveButton])
-    // ingredientsReport.classList.add("hidden");
-    // cookCardInstructions.classList.add("hidden");
-    // cookListAddRemoveButton.classList.add("hidden");
     cookCardActionButton.classList = "cook-card-action hidden";
     cookCardActionButton.classList = "cook-card-action hidden";
     cookCardCancelButton.innerText = "OK";
   } else {
     cookRecipeMessage.innerText = "The following items were added to your grocery list";
     hideElements([ingredientsReport, cookCardInstructions, cookListAddRemoveButton])
-    // ingredientsReport.classList.add("hidden");
-    // cookCardInstructions.classList.add("hidden");
-    // cookListAddRemoveButton.classList.add("hidden");
     ingredientConfirmationList.classList.remove("hidden");
     cookCardActionButton.classList = "cook-card-action hidden";
     cookCardActionButton.classList = "cook-card-action hidden";
@@ -411,9 +407,6 @@ const recipeToCookRemovalConfirmation = (recipe) => {
   cookRecipeMessage.innerText = `${recipe.name} was removed from your list of recipes to cook`;
   cookCardActionButton.classList = "cook-card-action hidden";
   hideElements([ingredientsReport, cookCardInstructions, cookListAddRemoveButton])
-  // ingredientsReport.classList.add("hidden");
-  // cookCardInstructions.classList.add("hidden");
-  // cookListAddRemoveButton.classList.add("hidden");
   cookCardCancelButton.innerText = "OK";
   updateLocalStorage();
 }
