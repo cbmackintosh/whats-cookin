@@ -52,7 +52,8 @@ const capitalizeWords = (phrase) => {
 
 function loadRandomUser() {
   let randomUser = usersData[1] // userData[Math.floor(Math.random() * userData.length)]
-  currentUser = new User(randomUser, 
+  currentUser = new User(
+    randomUser, 
     ingredientsData, 
     fetchLocalStorageData(`${randomUser.id}-favorites`), 
     fetchLocalStorageData(`${randomUser.id}-recipes-to-cook`),
@@ -137,6 +138,7 @@ const loadRecipeCard = (event) => {
       <button id=${selectedRecipe.id} class="lets-cook-button">Lets Cook</button>
     `
     document.querySelector('.instruction-card-img').src = selectedRecipe.image;
+    document.querySelector('.instruction-card-img').alt = selectedRecipe.name;
     document.location.href = "#recipeDetailsContainer";
     suggestRecipes();
   }
@@ -148,7 +150,7 @@ const loadPageResults = (recipeArray, page) => {
   page.innerHTML = "";
   recipeArray.forEach(recipe => page.innerHTML += `
     <article class="recipe-card recipe ${createKebab(recipe.name)} ">
-      <img class="recipe-card-img" src="${recipe.image}">
+      <img class="recipe-card-img" src="${recipe.image}" alt="${recipe.name}">
       <p class="recipe-card-name">${recipe.name}</p>
       <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
       <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
@@ -183,7 +185,7 @@ const populateRecipeCarousel = () => {
     recipeCarousel.innerHTML += `
     <li class="glide__slide">
       <article class="recipe-card recipe recipe-card-carousel ${createKebab(recipe.name)}" >
-        <img class="recipe-card-img" src="${recipe.image}">
+        <img class="recipe-card-img" src="${recipe.image}" alt=${recipe.name}>
         <p class="recipe-card-name">${recipe.name}</p>
         <p class="recipe-card-cost">${recipe.getIngredientsCost()}</p>
         <button class="recipe-card-button ${toggleFavoriteButton(recipe)}"></button>
@@ -213,7 +215,7 @@ const suggestRecipes = () => {
     document.querySelector('.meal-suggestion-container').innerHTML += `
       <article class="meal-suggestion recipe ${createKebab(recipe.name)}">
         <div class="img-cropper">
-          <img class="zoom meal-suggestion-img" src="${recipe.image}">
+          <img class="zoom meal-suggestion-img" src="${recipe.image}" alt="${recipe.name}">
         </div>
         <p class="meal-suggestion-name">${recipe.name}</p>
       </article>
