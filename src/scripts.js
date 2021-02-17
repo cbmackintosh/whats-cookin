@@ -293,7 +293,7 @@ const loadCookCard = (event) => {
     cookCard.classList.remove("hidden");
     cookCardLayoutHandler(selectedRecipe);
   }
-  document.querySelector('.lets-cook-button').disabled = true;
+  // document.querySelector('.lets-cook-button').disabled = true;
 }
 
 const cookCardLayoutHandler = (recipe) => {
@@ -431,8 +431,8 @@ const cookListAddRemoveHandler = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
   if (cookListAddRemoveButton.className.includes('cook-list-action add')) {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
-    currentUser.addRecipeToCook(selectedRecipe);
     currentUser.addToGroceryList(missingIngredients, selectedRecipe);
+    currentUser.addRecipeToCook(selectedRecipe);
     addedToGroceryListConfirmation(selectedRecipe);
   } else if (cookListAddRemoveButton.classList.value === "cook-list-action remove") {
     currentUser.removeRecipeToCook(selectedRecipe);
@@ -446,7 +446,7 @@ const cookCardHideAndReset = () => {
   ingredientsReport.classList.remove("hidden");
   cookCardInstructions.classList.remove("hidden");
   resetIngredientsReport();
-  document.querySelector('.lets-cook-button').disabled = false;
+  // document.querySelector('.lets-cook-button').disabled = false;
 }
 
 const resetIngredientsReport = () => {
