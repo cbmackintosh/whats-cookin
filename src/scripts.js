@@ -218,10 +218,10 @@ const searchAllRecipes = (event) => {
 };
 
 const suggestRecipes = () => {
-  document.querySelector('.meal-suggestion-container').innerHTML = "";
+  mealSuggestionContainer.innerHTML = "";
   const suggestions = pickRandomRecipes(3);
   suggestions.forEach(recipe => {
-    document.querySelector('.meal-suggestion-container').innerHTML += `
+    mealSuggestionContainer.innerHTML += `
       <article class="meal-suggestion recipe ${createKebab(recipe.name)}">
         <div class="img-cropper">
           <img class="zoom meal-suggestion-img" src="${recipe.image}" alt="${recipe.name}">
@@ -230,6 +230,7 @@ const suggestRecipes = () => {
       </article>
     `
   });
+  mealSuggestionContainer.insertAdjacentHTML('afterbegin', '<h3 class="meal-suggestion-header">You May Also Like:</h3>')
 };
 
 const loadRecipesToCook = (event) => {
@@ -292,6 +293,7 @@ const loadCookCard = (event) => {
     cookCard.classList.remove("hidden");
     cookCardLayoutHandler(selectedRecipe);
   }
+  // document.querySelector('.lets-cook-button').disabled = true;
 }
 
 const cookCardLayoutHandler = (recipe) => {
@@ -429,8 +431,8 @@ const cookListAddRemoveHandler = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
   if (cookListAddRemoveButton.className.includes('cook-list-action add')) {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
-    currentUser.addRecipeToCook(selectedRecipe);
     currentUser.addToGroceryList(missingIngredients, selectedRecipe);
+    currentUser.addRecipeToCook(selectedRecipe);
     addedToGroceryListConfirmation(selectedRecipe);
   } else if (cookListAddRemoveButton.classList.value === "cook-list-action remove") {
     currentUser.removeRecipeToCook(selectedRecipe);
@@ -444,6 +446,7 @@ const cookCardHideAndReset = () => {
   ingredientsReport.classList.remove("hidden");
   cookCardInstructions.classList.remove("hidden");
   resetIngredientsReport();
+  // document.querySelector('.lets-cook-button').disabled = false;
 }
 
 const resetIngredientsReport = () => {
@@ -547,6 +550,7 @@ window.addEventListener('load', loadRandomUser);
 window.addEventListener('load', populateRecipeCarousel);
 recipeCarousel.addEventListener('click', () => loadRecipeCard(event));
 searchPage.addEventListener('click', () => loadRecipeCard(event));
+recipesToCookPage.addEventListener('click', () => loadRecipeCard(event));
 pageTitle.addEventListener('click', () => loadPage(homePage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
