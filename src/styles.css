@@ -276,8 +276,7 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   justify-items: center;
-  /* height: fit-content; */
-  min-height: 100vh;
+  height: 100vh;
   overflow: scroll;
 }
 
@@ -652,8 +651,7 @@ td {
   background-repeat: no-repeat;
   background-position: center;
   grid-column: 1/4;
-  /* height:fit-content; */
-  min-height: 100vh;
+  height: 100vh;
   line-height: 2;
   width: 100%;
   padding:50px;
@@ -682,7 +680,6 @@ td {
   padding:50px;
   backdrop-filter:blur(2px);
   height: fit-content;
-  min-height: 95vh;
   width: 100%;
 }
 
@@ -857,9 +854,3 @@ td {
 .flex {
   display: flex;
 }
-
-/* .container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-} */
