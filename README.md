@@ -6,7 +6,7 @@
 
 **Abstract:**
 
-In this project, you will be creating a recipe tracking / meal planning application that allows users to view their favorite recipes and plan shopping trips around them, similar to websites like All Recipes or New York Times Cooking. <a href=https://gist.github.com/cbmackintosh/b5e3bc69b09c0c6a9dc5abc8d16556f4>Inspiration for design and functionality</a> was drawn from New York Times Cooking and similar designs found on Dribble.
+Whats Cookin' is a recipe tracking / meal planning application that allows users to view their favorite recipes and plan shopping trips around them, similar to websites like All Recipes or New York Times Cooking. <a href=https://gist.github.com/cbmackintosh/b5e3bc69b09c0c6a9dc5abc8d16556f4>Inspiration for design and functionality</a> was drawn from New York Times Cooking and similar designs found on Dribble.
 
 ![Screen Shot 2021-02-17 at 8 56 49 AM](https://user-images.githubusercontent.com/72054706/108230736-4fef0280-70fe-11eb-84e9-554e941c1674.png)
 
