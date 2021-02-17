@@ -442,7 +442,7 @@ const recipeToCookRemovalConfirmation = (recipe) => {
 // cookListActionButton
 const cookListAddRemoveHandler = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
-  if (cookListAddRemoveButton.className.includes('cook-list-action')) {
+  if (cookListAddRemoveButton.className.includes('cook-list-action add')) {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
     currentUser.addRecipeToCook(selectedRecipe);
     currentUser.addToGroceryList(missingIngredients, selectedRecipe);
