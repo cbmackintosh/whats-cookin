@@ -25,7 +25,7 @@ class User {
     if (!this.recipesToCook.map(recipe => recipe.id).includes(recipe.id)) {
       this.recipesToCook.push(recipe)
     } else {
-      return
+      return true
     }
   }
 

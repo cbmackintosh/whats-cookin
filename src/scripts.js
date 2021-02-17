@@ -200,10 +200,10 @@ const searchAllRecipes = (event) => {
 };
 
 const suggestRecipes = () => {
-  document.querySelector('.meal-suggestion-container').innerHTML = "";
+  mealSuggestionContainer.innerHTML = "";
   const suggestions = pickRandomRecipes(3);
   suggestions.forEach(recipe => {
-    document.querySelector('.meal-suggestion-container').innerHTML += `
+    mealSuggestionContainer.innerHTML += `
       <article class="meal-suggestion recipe ${createKebab(recipe.name)}">
         <div class="img-cropper">
           <img class="zoom meal-suggestion-img" src="${recipe.image}">
@@ -212,6 +212,7 @@ const suggestRecipes = () => {
       </article>
     `
   });
+  mealSuggestionContainer.insertAdjacentHTML('afterbegin', '<h3 class="meal-suggestion-header">You May Also Like:</h3>')
 };
 
 const loadRecipesToCook = (event) => {

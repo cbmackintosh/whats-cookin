@@ -2,7 +2,6 @@
     margin: 0;
     box-sizing: border-box;
     font-family: "Brygada 1918"
-    /* border: .5px solid red; */
 }
 
 .grid {
@@ -16,9 +15,6 @@ a {
   color: black;
   padding-bottom: 25px;
 }
-/* html {
-  width: 1350px;
-} */
 
 .container {
   display: flex;
@@ -27,6 +23,7 @@ a {
 }
 
 /*Navigation*/
+
 header {
   grid-column: 1/4;
 }
@@ -36,13 +33,6 @@ header {
   grid-row: 1;
   align-items: center;
   width: 100%;
-  
-}
-
-.page-title, 
-.navigation-buttons, 
-.search {
-  /* display: inline-block; */
 }
 
 .page-title {
@@ -59,7 +49,6 @@ header {
 }
 
 .navigation-buttons {
-  /* border: .5px solid red; */
   height: 100%;
   grid-column: 3;
   grid-row: 1;
@@ -91,19 +80,14 @@ a:hover {
   transition: border 0.2s, color 0.2s ease-in-out;
 }
 
-.search::before {
-  /* display: none; */
-  content: url(https://static01.nyt.com/applications/cooking/d766d05/assets/nav-inline-search-glass.svg);
-}
-
 .search,
 .search-box {
   margin-left: 10px;
+  grid-column: 2
 }
 
-.search {
-  grid-column: 2
-
+.search::before {
+  content: url(https://static01.nyt.com/applications/cooking/d766d05/assets/nav-inline-search-glass.svg);
 }
 
 .search-box {
@@ -117,7 +101,8 @@ a:hover {
   display: none;
 }
 
-.drop-down {
+.drop-down,
+.search-icon {
   display: none;
   background: url(https://cdn4.iconfinder.com/data/icons/wirecons-free-vector-icons/32/menu-alt-512.png);
   background-size: contain;
@@ -132,22 +117,20 @@ a:hover {
 }
 
 .search-icon {
-  display: none;
   background: url(https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-search-strong-512.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  height: 30px;
-  width: 30px;
-  justify-self: center;
-  transition: filter 0.3s ease-in-out;
-  border: none;
-  outline: none;
+  /* height: 30px; */
+  /* width: 30px; */
+  /* justify-self: center; */
+  /* transition: filter 0.3s ease-in-out; */
+  /* border: none; */
+  /* outline: none; */
 }
 
 @media screen and (min-width: 1450px) {
   .navigation-buttons{
-    /* display: none; */
     width: 530px;
     justify-self: right;
   }
@@ -233,19 +216,13 @@ a:hover {
     z-index: 200;
     grid-row: 2/6;
     grid-column: 1/ span 2;
-    /* justify-self: center; */
     flex-direction: column;
     background: white;
-    /* justify-self: stretch */
   }
 
   .button {
     height: 50px;
     border-bottom: .5px solid black;
-  }
-
-  .search-page {
-    /* position: */
   }
 
   .page-title {
@@ -425,7 +402,7 @@ a:hover {
   margin: 40px auto;
   height: 1200px;
   width: 95%;
-  background-color: #e3ffda;
+  background-color: #AFDDDB;
   border-radius: 10px;
 }
 
@@ -442,6 +419,7 @@ a:hover {
   border-radius: 10px;
   box-shadow: 0px 13px 20px 0px rgba(78, 78, 78, 0.5);
 }
+
 .direction-container,
 .ingredient-container {
   height: 250px;
@@ -455,22 +433,22 @@ a:hover {
   height: 100%;
   width: 40%;
   padding: 30px;
-  background-color:#cbf1df;
+  background-color:#E5FCF1;
   border-radius: 10px;
 }
 
 .instruction-card-recipe-name {
-  font-size: 2em;
+  font-size: 30px;
   height: 120px;
 }
 
 .instruction-card-header {
-  font-size: 1em;
+  font-size: 16px;
   margin: 10px 0;
 }
 
 .instruction-card-steps {
-  font-size: .8em;
+  font-size: 13px;
   line-height: 1.5;
   letter-spacing: 1px;
 }
@@ -516,8 +494,14 @@ td {
   transition: background-color 300ms ease-in-out;
 }
 
+.meal-suggestion-header {
+  position:absolute;
+  top:0;
+  left: 20px;
+  margin-right: 100px;
+}
+
 .meal-suggestion {
-  /* margin-bottom: 0px; */
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -526,8 +510,8 @@ td {
 }
 
 .img-cropper {
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
   height: 125px;
   width: 125px;
   border-radius: 50%;
@@ -557,17 +541,19 @@ td {
 }
 
 .meal-suggestion-container{
+  position:relative;
+  /* border: 2px solid red; */
+  height: 300px;
   width: 45%;
   justify-content: space-between;
+  align-items: flex-end;
+  /* display: unset; */
 }
 /*Cook recipe card*/ 
 
 .cook-recipe-card {
   padding: 40px;
-  display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items:center;
   position: fixed;
   left: 50%;
   top: 50%;
@@ -580,25 +566,16 @@ td {
 }
 
 .cook-card-options {
-  
   display: flex;
   width: 100%;
   justify-content: space-around;
 }
 
-.cook-card-button {
-  /* margin-top: 30px; */
+.cook-recipe-message {
+  margin-bottom: 20px;
+  text-align: center;
 }
-@media screen and (max-width: 800px) {
-  .cook-recipe-card {
-    width: 80%
-  }
 
-  .instruction-card {
-    padding: 30px 5px;
-    width: 95%;
-  }
-}
 
 /* INGREDIENTS REPORT */
 
@@ -653,7 +630,7 @@ td {
   }
   
   .instruction-card-img {
-    height: auto;
+    /* height: auto; */
     width: 90%;
     margin-bottom: 80px;
   }
@@ -663,6 +640,42 @@ td {
   }
 }
 
+@media screen and (max-width: 800px) {
+  .instruction-card-directions
+  .instruction-card-img
+  .meal-suggestion-container {
+    width: 100%;
+  }
+
+  .cook-recipe-card {
+    width: 95%;
+  }
+
+  .instruction {
+    padding: 10px;
+    width:100%;
+  }
+
+  .instruction-card {
+    padding: 20px 0px;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .meal-suggestion-img {
+  height: 100px;
+  }
+  
+  .img-cropper {
+    width:100px;
+    height:100px;
+  }
+
+  .instruction-card-directions {
+    padding: 20px
+  }
+}
 /*Pantry*/
 
 .pantry-page,
@@ -685,11 +698,13 @@ td {
 .pantry-list{
   width:40%
 }
+
 .pantry-list-item,
 .pantry-list-quantity {
   font-size: 18px;
   border-bottom:1px solid rgb(0, 0, 0);
 }
+
 /* Grocery List*/
 
 .grocery-list-page {
@@ -699,7 +714,6 @@ td {
 
 .grocery-container {
   padding:50px;
-  /* position:absolute; */
   backdrop-filter:blur(3px);
   height: fit-content;
   min-height: 95vh;
@@ -712,17 +726,14 @@ td {
 
 .grocery-list-items {
   position: relative;
-  /* border: 2px solid red; */
   width: 300px
 }
 
 .quantity {
-  /* border: 2px solid red; */
   position: absolute;
   right: 0;
   display: inline-block;
   text-align: right;
-  /* color: red; */
 }
 
 .add-to-pantry {
@@ -747,7 +758,6 @@ td {
 
 .more-ingredients {
   position: absolute;
-  /* border: 2px solid red; */
   padding-bottom: 100px;
   font-size: 30px;
   font-weight: bold;
@@ -762,9 +772,6 @@ td {
   backdrop-filter: blur(1px) grayscale(100%) brightness(30%);
   z-index: 20;
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black
-}
-.blur {
-  /* filter: blur(1px) grayscale(100%) brightness(50%); */
 }
 
 .hidden {
@@ -781,6 +788,7 @@ td {
   background-repeat: no-repeat;
   background-position: center;
 }
+
 .flex{
   display: flex;
 }
