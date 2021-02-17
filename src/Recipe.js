@@ -5,7 +5,7 @@ class Recipe {
   constructor(recipe, ingredientsArray) {
     this.id = recipe.id;
     this.image = recipe.image;
-    this.ingredients = recipe.ingredients.map(ingredient => new Ingredient(ingredient.id, ingredient.quantity, ingredientsArray))
+    this.ingredients = this.mergeDuplicateIngredients(recipe.ingredients.map(ingredient => new Ingredient(ingredient.id, ingredient.quantity, ingredientsArray)))
     this.name = recipe.name;
     this.instructions = recipe.instructions;
     this.tags = recipe.tags;
@@ -25,6 +25,28 @@ class Recipe {
     this.instructions.forEach(instruction => result.push(`${instruction.number}.) ${instruction.instruction}`))
     return result;
   }
+
+  mergeDuplicateIngredients(ingredientsArray) {
+    let newIngredientsArray = []
+    ingredientsArray.forEach(ingredient => {
+      if (ingredientsArray.filter(duplicateIngredient => duplicateIngredient.id === ingredient.id).length > 1) {
+        let mergedIngredient = {
+          id: ingredient.id,
+          name: ingredient.name,
+          estimatedCost: ingredient.estimatedCost,
+          quantity: {
+            amount: ingredientsArray.filter(duplicateIngredient => duplicateIngredient.id === ingredient.id).reduce((total, instance) => total += instance.quantity.amount, 0),
+            unit: ingredient.unit
+          }
+        }
+        newIngredientsArray.map(ingredient => ingredient.id).includes(mergedIngredient.id) ? null : newIngredientsArray.push(mergedIngredient)
+      } else {
+        newIngredientsArray.push(ingredient)
+      }
+    })
+    return newIngredientsArray;
+  }
+
 }
 
 if (typeof module !== 'undefined') {

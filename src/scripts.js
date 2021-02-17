@@ -85,7 +85,7 @@ const printInstructions = (recipe) => {
 };
 
 const printIngredients = (recipe) => {
-  return recipe.ingredients.reduce((acc, ingredient) => {
+  return recipe.ingredients.reduce((display, ingredient) => {
     return display += `
     <tr>
       <td class="instruction-card-ingredient">${capitalizeWords(ingredient.name)}</td>
@@ -168,12 +168,12 @@ const blurCard = () => {
 }
 
 const pickRandomRecipes = (amount) => {
-  return recipeRepository.recipes.reduce((array, recipe) => {
+  return recipeRepository.recipes.reduce((recipeArray, recipe) => {
     const randomRecipe = recipeRepository.recipes[Math.floor(Math.random() * recipeRepository.recipes.length)];
-    if(!array.includes(randomRecipe) && array.length < amount) {
-      array.push(randomRecipe);
+    if(!recipeArray.includes(randomRecipe) && recipeArray.length < amount) {
+      recipeArray.push(randomRecipe);
     }
-    return array;
+    return recipeArray;
   }, []);
 };
 
@@ -199,9 +199,9 @@ const searchAllRecipes = (event) => {
     loadPageResults(recipeRepository.masterSearch(searchBox.value), searchPage);
   } else if ((event.key === "Enter" && searchBox.value && searchBox.classList.value.includes("search-favs-mode")) || (event.target.className.includes("search-button") && searchBox.value && searchBox.classList.value.includes("search-favs-mode") )) {
     event.preventDefault();
-    loadPageResults(recipeRepository.masterSearch(searchBox.value);
-    .filter(recipe => currentUser.favoriteRecipes;
-    .map(favorite => favorite.id);
+    loadPageResults(recipeRepository.masterSearch(searchBox.value)
+    .filter(recipe => currentUser.favoriteRecipes
+    .map(favorite => favorite.id)
     .includes(recipe.id)), searchPage);
   }
 };
