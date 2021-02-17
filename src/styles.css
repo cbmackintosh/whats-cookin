@@ -276,8 +276,9 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   justify-items: center;
-  height: fit-content;
+  /* height: fit-content; */
   min-height: 100vh;
+  overflow: scroll;
 }
 
 /*Recipe cards */
@@ -473,7 +474,7 @@ td {
 
 .instruction-card-img {
   height: auto;
-  width: 45%;
+  width: 40%;
   border-radius: 10px;
 }
 
@@ -651,12 +652,13 @@ td {
   background-repeat: no-repeat;
   background-position: center;
   grid-column: 1/4;
-  height:fit-content;
-  min-height: 95vh;
+  /* height:fit-content; */
+  min-height: 100vh;
   line-height: 2;
   width: 100%;
   padding:50px;
   color:white;
+  overflow: scroll;
 }
 
 .pantry-list{
@@ -686,7 +688,8 @@ td {
 
 .grocery-list-items {
   position: relative;
-  width: 300px;
+  font-size: 18px;
+  width: 350px;
 }
 
 .quantity {
@@ -781,20 +784,30 @@ td {
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 420px) {
   .more-ingredients {
     font-size: 22px;
   }
+
   .recipe-card {
     height: 225px;
     min-width: 160px;
   }
+
   .pantry-list {
     width:100%
   }
 
-  .recipes-to-cook-page {
-    padding:0;
+  .recipes-to-cook-page,
+  .grocery-container,
+  .pantry-page {
+    padding: 10px;
+  }
+
+  .pantry-list-item, 
+  .pantry-list-quantity,
+  .grocery-list-items {
+    font-size: 16px;
   }
 
   .search-page,
@@ -844,3 +857,9 @@ td {
 .flex {
   display: flex;
 }
+
+/* .container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+} */
