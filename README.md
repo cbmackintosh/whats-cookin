@@ -47,6 +47,7 @@ Shrinking of the screen will trigger the mobile friendly design with an all new 
 * Turing School of Software Design - Whats Cookin' starter kit: https://github.com/turingschool-examples/whats-cookin-starter-kit
 * Visual Studio Code: 1.21.1 (text editor)
 * npm 6.14.8 (package manager)
+* Glide.js 3.4.1 https://glidejs.com/
 * Mocha ^6.1.4 (test framework)
 * Chai ^4.2.0 (assertion library)
 * eslint 7.19.0 (linter)
