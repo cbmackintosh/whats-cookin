@@ -33,9 +33,9 @@ The Grocery List shows the user what items they need to purchase to cook recipes
 - From the root directory, open the application on web browser using `open ./src/index.html`
 
 **Technologies used:**
-* <br><img src="https://img.shields.io/badge/javascript%20-%23323330.svg?&style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/><br>
-* <img src="https://img.shields.io/badge/css3%20-%231572B6.svg?&style=for-the-badge&logo=css3&logoColor=white"/><br>
-* <img src="https://img.shields.io/badge/html5%20-%23E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white"/>
+<br><img src="https://img.shields.io/badge/javascript%20-%23323330.svg?&style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/><br>
+<img src="https://img.shields.io/badge/css3%20-%231572B6.svg?&style=for-the-badge&logo=css3&logoColor=white"/><br>
+<img src="https://img.shields.io/badge/html5%20-%23E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white"/>
 * Turing School of Software Design - Whats Cookin' starter kit: https://github.com/turingschool-examples/whats-cookin-starter-kit
 * Visual Studio Code: 1.21.1 (text editor)
 * npm 6.14.8 (package manager)
