@@ -240,6 +240,15 @@ a:hover {
   grid-row:2
 }
 
+.search-page {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260);
+  border-top: 1px solid rgb(138, 138, 138);
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  backdrop-filter: blur(1px);
+}
+
 .home-page-header {
   text-align: center;
   color: rgb(236, 236, 236);
@@ -262,7 +271,6 @@ a:hover {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   justify-items: center;
-  background-color: rgb(198 225 185 / 52%);
   height: fit-content;
   min-height: 100vh;
 }
@@ -471,7 +479,7 @@ td {
   border-radius: 5px;
   outline:none;
   box-shadow: 0px 13px 20px 0px rgba(78, 78, 78, 0.5);
-  transition: background-color 11100ms ease-in-out;
+  transition: background-color 300ms ease-in-out;
 }
 
 .cook-card-button:hover,
@@ -734,10 +742,11 @@ td {
 
   .recipe-card {
     width: 80%;
+    max-width: 200px;
   }
 
   .recipe-card-name{
-    height: 90px;
+    height: 30%;
   }
 
   .navigation-bar {
