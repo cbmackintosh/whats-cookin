@@ -1,6 +1,5 @@
 // const Ingredient = require('../src/Ingredient.js');
 
-
 class User {
   constructor(userData, ingredientsArray, storedFavs, storedRecipesToCook, storedGroceryList) {
     this.name = userData.name
