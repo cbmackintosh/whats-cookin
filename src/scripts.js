@@ -150,6 +150,7 @@ const loadPageResults = (array, page) => {
 };
 
 const blurCard = () => {
+  searchPage.innerHTML =""
   currentUser.recipesToCook.forEach( recipe => {
     if(!currentUser.hasSufficientIngredientsFor(recipe)){
       let recipeCard = document.querySelector("." + createKebab(recipe.name))
@@ -577,9 +578,9 @@ document.addEventListener('keydown', searchAllRecipes)
 window.addEventListener('click', () => openDropDownMenu(event))
 window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => {
+  loadRecipesToCook(event)
   loadMobileSearch(event)
   loadPantryPage(event)
-  loadRecipesToCook(event)
   loadMyRecipes(event)
   loadAllRecipes(event)
 })
