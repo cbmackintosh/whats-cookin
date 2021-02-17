@@ -27,6 +27,14 @@ const groceryListForm = document.querySelector(".grocery-list-items")
 const addToPantryButton = document.querySelector('.add-to-pantry')
 const recipesToCook = document.querySelector('.recipes-to-cook')
 const recipesToCookPage = document.querySelector('.recipes-to-cook-page')
+const cookCard = document.querySelector(".cook-recipe-card");
+const ingredientsReport = document.querySelector(".ingredients-report");
+const cookRecipeMessage = document.querySelector(".cook-recipe-message")
+const cookCardInstructions = document.querySelector(".cook-card-instructions")
+const ingredientConfirmationList = document.querySelector(".ingredient-confirmation-list")
+const cookCardActionButton = document.querySelector(".cook-card-action")
+const cookListAddRemoveButton = document.querySelector(".cook-list-action")
+const cookCardCancelButton = document.querySelector(".cook-card-cancel")
 
 
 const createKebab = (recipeName) => recipeName.replace(/[^a-zA-Z ]/g, '').split(' ').filter(el => el.length).join('-');
@@ -267,19 +275,7 @@ const loadMobileSearch = (event) => {
 }
 
 
-// --------------------------------------------------------------------------------------------------
 
-const cookCard = document.querySelector(".cook-recipe-card");
-const ingredientsReport = document.querySelector(".ingredients-report");
-const cookRecipeMessage = document.querySelector(".cook-recipe-message")
-const cookCardInstructions = document.querySelector(".cook-card-instructions")
-const ingredientConfirmationList = document.querySelector(".ingredient-confirmation-list")
-
-const cookCardActionButton = document.querySelector(".cook-card-action")
-const cookListAddRemoveButton = document.querySelector(".cook-list-action")
-const cookCardCancelButton = document.querySelector(".cook-card-cancel")
-
-// LOAD THE CARD
 const loadCookCard = (event) => {
   let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
   console.log(selectedRecipe)
@@ -292,88 +288,68 @@ const loadCookCard = (event) => {
 const cookCardLayoutHandler = (recipe) => {
   cookCardActionButton.id = recipe.id;
   if (currentUser.recipesToCook.map(savedRecipe => savedRecipe.id).includes(parseInt(recipe.id))) {
-    cookCardSavedRecipeLayout(recipe); // 1 RECIPE IS ALREADY ON THE COOK LIST
+    cookCardSavedRecipeLayout(recipe);
   } else {
-    cookCardUnsavedRecipeLayout(recipe); // 2 RECIPE IS NOT ON THE COOK LIST
+    cookCardUnsavedRecipeLayout(recipe);
   }
 }
-
-// 1 RECIPE IS ALREADY ON THE COOK LIST -----------------------------------------------------------------
 
 const cookCardSavedRecipeLayout = (recipe) => {
   if (currentUser.hasSufficientIngredientsFor(recipe)) {
-    readyToCookLayout(recipe); // 1.1 RECIPE IS ON THE COOK LIST AND USER HAS ENOUGH INGREDIENTS
+    readyToCookLayout(recipe);
   } else {
-    notReadyToCookLayout(recipe); // 1.2 RECIPE IS ON THE COOK LIST BUT USER HAS INSUFFICIENT INGREDIENTS
+    notReadyToCookLayout(recipe);
   }
 }
 
-// 1.1)
 const readyToCookLayout = (recipe) => {
   cookRecipeMessage.innerText = "You have enough ingredients for this recipe";
   compileIngredientsReport(recipe);
   cookCardInstructions.innerText = "Clicking COOK NOW will remove the needed ingredient amounts from your pantry";
-  //ACTION BUTTON:
   cookCardActionButton.innerText = "COOK NOW";
   cookCardActionButton.classList = "cook-card-action cook-now";
-  //ADD-REMOVE BUTTON:
   cookListAddRemoveButton.innerText = "REMOVE";
   cookListAddRemoveButton.classList = "cook-list-action remove";
 }
 
-// 1.2)
 const notReadyToCookLayout = (recipe) => {
   cookRecipeMessage.innerText = "You still do not have enough ingredients for this recipe";
   compileIngredientsReport(recipe);
   cookCardInstructions.innerText = "Click below to add the missing ingredients to your grocery list"
-  //ACTION BUTTON:
   cookCardActionButton.innerText = "ADD TO GROCERY"
   cookCardActionButton.classList = "cook-card-action add-to-grocery"
-
-  //ADD-REMOVE BUTTON:
   cookListAddRemoveButton.innerText = "REMOVE";
   cookListAddRemoveButton.classList = "cook-list-action remove";
 } 
 
-// 2 RECIPE IS NOT ON THE COOK LIST ----------------------------------------------------------------------
-
 const cookCardUnsavedRecipeLayout = (recipe) => {
   if (currentUser.hasSufficientIngredientsFor(recipe)) {
-    sufficientIngredientsLayout(recipe) // 2.1 RECIPE IS NOT ON THE COOK LIST AND THE USER HAS ENOUGH INGREDIENTS
+    sufficientIngredientsLayout(recipe)
   } else {
-    insufficientIngredientsLayout(recipe) // 2.2 RECIPE IS NOT ON THE COOK LIST AND USER HAS INSUFFICIENT INGREDIENTS
+    insufficientIngredientsLayout(recipe)
   }
 }
 
-// 2.1)
 const sufficientIngredientsLayout = (recipe) => {
   cookRecipeMessage.innerText = "You have enough ingredients for this recipe";
   compileIngredientsReport(recipe);
   cookCardInstructions.innerText = "Clicking cook now will remove the ingredient amounts from your pantry";
-  //ACTION BUTTON:
   cookCardActionButton.innerText = "COOK NOW";
   cookCardActionButton.classList = "cook-card-action cook-now";
-  //ADD-REMOVE BUTTON:
   cookListAddRemoveButton.innerText = "ADD TO COOK LIST";
   cookListAddRemoveButton.classList = "cook-list-action add";
 }
 
-// 2.2)
 const insufficientIngredientsLayout = (recipe) => {
   cookRecipeMessage.innerText = "You do not have enough ingredients for this recipe";
   compileIngredientsReport(recipe);
   cookCardInstructions.innerText = "Adding this recipe to your cook list will add the missing ingredients to your grocery list";
-  //ACTION BUTTON:
   cookCardActionButton.classList = "cook-card-action hidden";
-  //ADD-REMOVE BUTTON:
   cookListAddRemoveButton.innerText = "ADD TO COOK LIST";
   cookListAddRemoveButton.classList = "cook-list-action add";
   cookListAddRemoveButton.id = recipe.id;
 }
 
-// ---------COOK CARD BUTTON RESPONSES---------------------------------------
-
-// cookCardActionButton
 const cookCardActionResponse = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
   if (cookCardActionButton.classList.value === "cook-card-action cook-now") {
@@ -439,7 +415,6 @@ const recipeToCookRemovalConfirmation = (recipe) => {
   updateLocalStorage()
 }
 
-// cookListActionButton
 const cookListAddRemoveHandler = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
   if (cookListAddRemoveButton.className.includes('cook-list-action add')) {
@@ -452,12 +427,7 @@ const cookListAddRemoveHandler = () => {
     recipeToCookRemovalConfirmation(selectedRecipe);
   }
 }
- 
-// --------------------------------------------------------------------------
 
-
-
-//CANCEL OUT OF THE CARD
 const cookCardHideAndReset = () => {
   cookCard.classList.add("hidden")
   cookCardCancelButton.innerText = "CANCEL"
@@ -478,9 +448,6 @@ const resetIngredientsReport = () => {
       <th>Enough?</th>
     </tr>`
 }
-
-
-//HELPER FUNCTIONS:
 
 const updateLocalStorage = () => {
   localStorage.setItem(`${currentUser.id}-recipes-to-cook`, JSON.stringify(currentUser.recipesToCook))
@@ -547,9 +514,9 @@ const checkValue = () => {
 
 const loadMyRecipes = (event) => {
   if(event.target.className.includes('my-recipes')) {
-    loadPageResults(currentUser.favoriteRecipes, searchPage)
-    searchBox.classList.remove('search-all-mode')
-    searchBox.classList.add('search-favs-mode')
+    loadPageResults(currentUser.favoriteRecipes, searchPage);
+    searchBox.classList.remove('search-all-mode');
+    searchBox.classList.add('search-favs-mode');
     searchBox.placeholder = "Search favorite recipes";
   }
 }
@@ -557,13 +524,11 @@ const loadMyRecipes = (event) => {
 const loadAllRecipes = (event) => {
   if (event.target.className.includes('all-recipes')) {
     loadPageResults(recipeRepository.recipes, searchPage)
-    searchBox.classList.add('search-all-mode')
-    searchBox.classList.remove('search-favs-mode')
+    searchBox.classList.add('search-all-mode');
+    searchBox.classList.remove('search-favs-mode');
     searchBox.placeholder = "Search all recipes";
   }
 }
-
-// -------------------------------------------------
 
 window.addEventListener('load', compileRecipeRepository);
 window.addEventListener('load', loadRandomUser);
@@ -575,20 +540,19 @@ pageTitle.addEventListener('click', () => loadPage(homePage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
 
-window.addEventListener('click', () => openDropDownMenu(event))
+window.addEventListener('click', () => openDropDownMenu(event));
 window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => {
-  loadRecipesToCook(event)
-  loadMobileSearch(event)
-  loadPantryPage(event)
-  loadMyRecipes(event)
-  loadAllRecipes(event)
+  loadRecipesToCook(event);
+  loadMobileSearch(event);
+  loadPantryPage(event);
+  loadMyRecipes(event);
+  loadAllRecipes(event);
 })
-instructionCardDirections.addEventListener("click", () => loadCookCard(event))
 
-cookCardActionButton.addEventListener('click', cookCardActionResponse)
-cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
-
-cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
-groceryListButton.addEventListener('click', loadGroceryPage) 
-addToPantryButton.addEventListener('click', checkValue) 
+instructionCardDirections.addEventListener("click", () => loadCookCard(event));
+cookCardActionButton.addEventListener('click', cookCardActionResponse);
+cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler);
+cookCardCancelButton.addEventListener('click', cookCardHideAndReset);
+groceryListButton.addEventListener('click', loadGroceryPage);
+addToPantryButton.addEventListener('click', checkValue);
