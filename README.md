@@ -13,14 +13,18 @@ Whats Cookin' is a recipe tracking / meal planning application that allows users
 
 Users are able to view a list of recipes on the app and filter those recipes by a combination of one or more names, ingredients and tags using a single streamlined search bar. Users can also add recipes to their list of favorites and filter that list using the same search bar on the My Recipes tab.
 
-![Screen Shot 2021-02-17 at 9 00 03 AM](https://user-images.githubusercontent.com/72054706/108230995-8e84bd00-70fe-11eb-8b1a-eb2cdbea27a8.png)
+![Screen Shot 2021-02-17 at 3 43 52 PM](https://user-images.githubusercontent.com/72312636/108277646-fd7e0800-7136-11eb-97e4-827aed71726e.png)
 
 
 Clicking on any recipe will take the user to a more detailed recipe card with a list of ingredients, instructions and additional suggested dishes. From there, the Lets Cook button will indicate whether or not the user has enough ingredients for the selecte recipe, and what ingredients in what quantities are missing. From this menu, a variety of pathways and outcomes are possible as illustrated by the flow chart below:
 
-![Screen Shot 2021-02-17 at 9 04 54 AM](https://user-images.githubusercontent.com/72054706/108231683-3c906700-70ff-11eb-8e2f-d7c658dd819d.png)
+![Screen Shot 2021-02-17 at 3 04 43 PM](https://user-images.githubusercontent.com/72312636/108278803-cad50f00-7138-11eb-944f-693195c9b938.png)
 
-![Screen Shot 2021-02-17 at 9 05 44 AM](https://user-images.githubusercontent.com/72054706/108231782-592c9f00-70ff-11eb-9b1a-f08810d9b122.png)
+
+
+
+![Screen Shot 2021-02-17 at 3 04 54 PM](https://user-images.githubusercontent.com/72312636/108278712-a416d880-7138-11eb-8c7f-cb4464ce2e55.png)
+
 
 <img width="1386" alt="Screen Shot 2021-02-15 at 5 06 28 PM" src="https://user-images.githubusercontent.com/72054706/108231507-12d74000-70ff-11eb-9cbf-806e2407d8d2.png">
 
