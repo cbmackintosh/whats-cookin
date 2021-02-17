@@ -30,6 +30,10 @@ Clicking on any recipe will take the user to a more detailed recipe card with a 
 
 The Grocery List shows the user what items they need to purchase to cook recipes on their Recipes To Cook List. Once these are purchased, the user can add them to their pantry, giving them sufficient ingredients to cook previously locked recipes.
 
+<img width="661" alt="Screen Shot 2021-02-17 at 4 16 02 PM" src="https://user-images.githubusercontent.com/72312636/108280602-ae86a180-713b-11eb-8497-04f0f770e163.png">
+
+Shrinking of the screen will trigger the mobile friendly design with an all new navigation bar. 
+
 **Installation Instructions:**
 
 - Clone this repository `git@github.com:cbmackintosh/whats-cookin.git`
