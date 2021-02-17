@@ -60,6 +60,13 @@ function loadRandomUser() {
     fetchLocalStorageData(`${randomUser.id}-recipes-to-cook`),
     JSON.parse(localStorage.getItem(`${randomUser.id}-grocery-list`)));
   homePageHeader.innerText = `Hi, ${currentUser.name.split(' ')[0]}`
+  updatePantryWithLocalStorageData()
+}
+
+const updatePantryWithLocalStorageData = () => {
+  if (localStorage.getItem(`${currentUser.id}-pantry`)) {
+    currentUser.pantry = JSON.parse(localStorage.getItem(`${currentUser.id}-pantry`))
+  }
 }
 
 function fetchLocalStorageData(library) {
@@ -281,7 +288,6 @@ const loadMobileSearch = (event) => {
 
 const loadCookCard = (event) => {
   let selectedRecipe = recipeRepository.recipes.find(recipe => recipe.id === parseInt(event.target.id))
-  console.log(selectedRecipe);
   if(event.target.className.includes("lets-cook")) {
     cookCard.classList.remove("hidden");
     cookCardLayoutHandler(selectedRecipe);
@@ -457,6 +463,7 @@ const updateLocalStorage = () => {
   localStorage.setItem(`${currentUser.id}-recipes-to-cook`, JSON.stringify(currentUser.recipesToCook));
   localStorage.setItem(`${currentUser.id}-favorites`, JSON.stringify(currentUser.favoriteRecipes));
   localStorage.setItem(`${currentUser.id}-grocery-list`, JSON.stringify(currentUser.groceryList));
+  localStorage.setItem(`${currentUser.id}-pantry`, JSON.stringify(currentUser.pantry))
 }
 
 const findRecipeWithID = (id) => {
