@@ -52,7 +52,7 @@ const capitalizeWords = (phrase) => {
 
 
 function loadRandomUser() {
-  let randomUser = usersData[1] // userData[Math.floor(Math.random() * userData.length)]
+  let randomUser = userData[Math.floor(Math.random() * userData.length)]
   currentUser = new User(
     randomUser, 
     ingredientsData, 
@@ -293,7 +293,7 @@ const loadCookCard = (event) => {
     cookCard.classList.remove("hidden");
     cookCardLayoutHandler(selectedRecipe);
   }
-  // document.querySelector('.lets-cook-button').disabled = true;
+  document.querySelector('.lets-cook-button').disabled = true;
 }
 
 const cookCardLayoutHandler = (recipe) => {
@@ -446,7 +446,7 @@ const cookCardHideAndReset = () => {
   ingredientsReport.classList.remove("hidden");
   cookCardInstructions.classList.remove("hidden");
   resetIngredientsReport();
-  // document.querySelector('.lets-cook-button').disabled = false;
+  document.querySelector('.lets-cook-button').disabled = false;
 }
 
 const resetIngredientsReport = () => {
