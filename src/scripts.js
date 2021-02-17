@@ -1,4 +1,3 @@
-// const User = require("./User");
 
 let recipeRepository;
 let currentUser;
@@ -52,7 +51,7 @@ const capitalizeWords = (phrase) => {
 
 
 function loadRandomUser() {
-  let randomUser = userData[Math.floor(Math.random() * userData.length)]
+  let randomUser = usersData[Math.floor(Math.random() * usersData.length)]
   currentUser = new User(
     randomUser, 
     ingredientsData, 
@@ -292,8 +291,8 @@ const loadCookCard = (event) => {
   if(event.target.className.includes("lets-cook")) {
     cookCard.classList.remove("hidden");
     cookCardLayoutHandler(selectedRecipe);
+    document.querySelector('.lets-cook-button').disabled = true;
   }
-  document.querySelector('.lets-cook-button').disabled = true;
 }
 
 const cookCardLayoutHandler = (recipe) => {
