@@ -29,7 +29,7 @@ const recipesToCook = document.querySelector('.recipes-to-cook')
 const recipesToCookPage = document.querySelector('.recipes-to-cook-page')
 
 
-const createKebab = (recipeName) => recipeName.toLowerCase().split(' ').join('-');
+const createKebab = (recipeName) => recipeName.replace(/[^a-zA-Z ]/g, '').split(' ').filter(el => el.length).join('-');
 
 const compileRecipeRepository = () => {
   recipeRepository = new RecipeRepository(recipeData, ingredientsData)
@@ -136,8 +136,8 @@ const loadRecipeCard = (event) => {
 
 
 const loadPageResults = (array, page) => {
-  page.innerHTML = "";
   loadPage(page);
+  page.innerHTML = "";
   array.forEach(recipe => page.innerHTML += `
     <article class="recipe-card recipe ${createKebab(recipe.name)} ">
       <img class="recipe-card-img" src="${recipe.image}">
@@ -150,11 +150,10 @@ const loadPageResults = (array, page) => {
 };
 
 const blurCard = () => {
+  searchPage.innerHTML =""
   currentUser.recipesToCook.forEach( recipe => {
-
     if(!currentUser.hasSufficientIngredientsFor(recipe)){
-      const recipeCard = document.querySelector(`.${createKebab(recipe.name)}`)
-      // recipeCard.classList.add('blur');
+      let recipeCard = document.querySelector("." + createKebab(recipe.name))
       recipeCard.insertAdjacentHTML('afterbegin', '<p class="more-ingredients">Not enough ingredients</p>')
     }
 
@@ -217,7 +216,6 @@ const suggestRecipes = () => {
 
 const loadRecipesToCook = (event) => {
   if(event.target.className.includes('recipes-to-cook')) {
-    loadPage(recipesToCookPage);
     loadPageResults(currentUser.recipesToCook, recipesToCookPage);
     blurCard();
   };
@@ -384,7 +382,7 @@ const cookCardActionResponse = () => {
     ingredientsRemovalConfirmation(selectedRecipe)
   } else if (cookCardActionButton.classList.value === "cook-card-action add-to-grocery") {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
-    currentUser.addToGroceryList(missingIngredients)
+    currentUser.addToGroceryList(missingIngredients, selectedRecipe)
     addedToGroceryListConfirmation(selectedRecipe)
   }
 }
@@ -424,7 +422,7 @@ const addedToGroceryListConfirmation = (recipe) => {
     cookCardCancelButton.innerText = "OK";
     currentUser.returnMissingIngredientsFor(recipe).forEach(ingredient => {
       ingredientConfirmationList.innerHTML += `
-        <li class="insufficient">${ingredient}</li>`
+        <li class="insufficient">${ingredient.name}</li>`
     })
   }
   updateLocalStorage()
@@ -444,10 +442,10 @@ const recipeToCookRemovalConfirmation = (recipe) => {
 // cookListActionButton
 const cookListAddRemoveHandler = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
-  if (cookListAddRemoveButton.classList.value === "cook-list-action add") {
+  if (cookListAddRemoveButton.className.includes('cook-list-action')) {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
     currentUser.addRecipeToCook(selectedRecipe);
-    currentUser.addToGroceryList(missingIngredients);
+    currentUser.addToGroceryList(missingIngredients, selectedRecipe);
     addedToGroceryListConfirmation(selectedRecipe);
   } else if (cookListAddRemoveButton.classList.value === "cook-list-action remove") {
     currentUser.removeRecipeToCook(selectedRecipe);
@@ -527,17 +525,19 @@ const loadGroceryPage = () => {
   document.querySelector(".grocery-list-items").innerHTML = ""
   currentUser.groceryList.forEach(item => {
     document.querySelector(".grocery-list-items").innerHTML += `
-       <input type="checkbox" class="pantry-list-item" value="${item}">   
-       <label>${capitalizeWords(item)}</label><br>
+       <input type="checkbox" class="grocery-item" value="${item.id}">   
+       <label>${capitalizeWords(item.name)}</label><p class="quantity">${item.amountNeeded}</p><br>
     `
   });
 };
 
 const checkValue = () => {
-  const items = document.querySelectorAll(".pantry-list-item")
+  const items = document.querySelectorAll(".grocery-item")
   items.forEach(item => {
     if(item.checked){
-      currentUser.groceryList.splice(currentUser.groceryList.indexOf(item.value), 1);
+      const selectedGrocery = currentUser.groceryList.find(grocery => grocery.id === parseInt(item.value));
+      currentUser.groceryList.splice(currentUser.groceryList.indexOf(selectedGrocery), 1);
+      currentUser.addIngredientToPantry(selectedGrocery, ingredientsData);
     };
   });
   const updatedGroceryList = currentUser.groceryList;
@@ -578,9 +578,9 @@ document.addEventListener('keydown', searchAllRecipes)
 window.addEventListener('click', () => openDropDownMenu(event))
 window.addEventListener("resize", autoCloseMenu);
 navigationBar.addEventListener("click", () => {
+  loadRecipesToCook(event)
   loadMobileSearch(event)
   loadPantryPage(event)
-  loadRecipesToCook(event)
   loadMyRecipes(event)
   loadAllRecipes(event)
 })
@@ -588,6 +588,7 @@ instructionCardDirections.addEventListener("click", () => loadCookCard(event))
 
 cookCardActionButton.addEventListener('click', cookCardActionResponse)
 cookListAddRemoveButton.addEventListener('click', cookListAddRemoveHandler)
+
 cookCardCancelButton.addEventListener('click', cookCardHideAndReset)
 groceryListButton.addEventListener('click', loadGroceryPage) 
 addToPantryButton.addEventListener('click', checkValue) 

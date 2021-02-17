@@ -14,7 +14,7 @@ class User {
   addRecipeToFavs(recipe) {
     if (!this.favoriteRecipes.map(recipe => recipe.id).includes(recipe.id)) {
       this.favoriteRecipes.push(recipe)
-    }
+    } 
   }
 
   removeRecipeFromFavs(recipe) {
@@ -24,6 +24,8 @@ class User {
   addRecipeToCook(recipe) {
     if (!this.recipesToCook.map(recipe => recipe.id).includes(recipe.id)) {
       this.recipesToCook.push(recipe)
+    } else {
+      return
     }
   }
 
@@ -43,6 +45,7 @@ class User {
     let summary = []
     let requiredIngredients = recipe.ingredients
     requiredIngredients.forEach(ingredient => summary.push({
+      id: ingredient.id,
       name: ingredient.name, 
       required: ingredient.quantity.amount, 
       pantry: this.findAmountInPantryOf(ingredient), 
@@ -62,17 +65,45 @@ class User {
   }
 
   returnMissingIngredientsFor(recipe) {
-    return this.compareIngredientsToPantry(recipe).filter(ingredient => ingredient.difference < 0).map(ingredient => ingredient.name)
+    return this.compareIngredientsToPantry(recipe).filter(ingredient => ingredient.difference < 0).map(ingredient => { 
+      return {
+        id: ingredient.id,
+        name: ingredient.name,
+        amountNeeded: Math.ceil(Math.abs(ingredient.difference))
+      }
+    })
   }
 
-  addToGroceryList(array) {
-    this.groceryList = Array.from(new Set(this.groceryList.concat(array)))
+  addToGroceryList(array, recipe) {
+    if (this.addRecipeToCook(recipe)) {
+      return
+    }
+    array.forEach(item => {
+      this.groceryList.forEach( grocery => {
+        if(grocery.name === item.name) {
+          grocery.amountNeeded += item.amountNeeded
+        }
+      })
+      if(!this.groceryList.some( grocery => grocery.id === item.id)){
+        this.groceryList.push(item)
+      }
+    })
   }
 
   removeRecipeIngredientAmounts(recipe) {
     recipe.ingredients.map(ingredient => this.pantry.find(pantryItem => pantryItem.id === ingredient.id).quantity -= ingredient.quantity.amount)
   }
 
+  addIngredientToPantry(ingredient, ingredientsArray) {
+    this.pantry.forEach(item => {
+      if(item.id === ingredient.id){
+        item.quantity += ingredient.amountNeeded;
+      };
+    });
+    if (!this.pantry.some(item => item.id === ingredient.id)) {
+      this.pantry.push(new Ingredient(ingredient.id, ingredient.amountNeeded, ingredientsArray));
+    };
+  };
 }
 
 if (typeof module !== 'undefined') {
