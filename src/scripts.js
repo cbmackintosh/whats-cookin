@@ -428,7 +428,7 @@ const showElements = (elements) => {
 
 const cookListAddRemoveHandler = () => {
   let selectedRecipe = findRecipeWithID(parseInt(cookCardActionButton.id))
-  if (cookListAddRemoveButton.className.includes('cook-list-action add')) {
+  if (cookListAddRemoveButton.classList.value === 'cook-list-action add') {
     let missingIngredients = currentUser.returnMissingIngredientsFor(selectedRecipe);
     currentUser.addRecipeToCook(selectedRecipe);
     currentUser.addToGroceryList(missingIngredients, selectedRecipe);
@@ -548,6 +548,7 @@ window.addEventListener('load', loadRandomUser);
 window.addEventListener('load', populateRecipeCarousel);
 recipeCarousel.addEventListener('click', () => loadRecipeCard(event));
 searchPage.addEventListener('click', () => loadRecipeCard(event));
+recipesToCookPage.addEventListener('click', () => loadRecipeCard(event));
 pageTitle.addEventListener('click', () => loadPage(homePage));
 mealSuggestionContainer.addEventListener("click", () => loadRecipeCard(event));
 document.addEventListener('keydown', searchAllRecipes)
