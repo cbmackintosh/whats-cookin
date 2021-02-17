@@ -397,7 +397,7 @@ const ingredientsRemovalConfirmation = (recipe) => {
   ingredientConfirmationList.classList.remove("hidden");
   currentUser.compareIngredientsToPantry(recipe).forEach(ingredient => {
     ingredientConfirmationList.innerHTML += `
-    <li class"enough">${ingredient.name} ${ingredient.required.toFixed(2)} ${ingredient.unit}</li>`;
+    <li class="enough">${ingredient.name} ${ingredient.required.toFixed(2)} ${ingredient.unit}</li>`;
   })
   updateLocalStorage(); 
 }
