@@ -680,6 +680,7 @@ td {
   padding:50px;
   backdrop-filter:blur(2px);
   height: fit-content;
+  min-height: 100vh;
   width: 100%;
 }
 
